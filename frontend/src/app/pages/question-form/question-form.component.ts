@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Question, QuestionDifficulty, QuestionInput } from '../../models/question.model';
@@ -18,11 +18,11 @@ export class QuestionFormComponent implements OnInit {
   private readonly questionService = inject(QuestionService);
 
   readonly difficulties: QuestionDifficulty[] = ['easy', 'medium', 'hard'];
-  question?: Question;
-  isEditMode = false;
-  isLoading = false;
-  isSaving = false;
-  error = '';
+  readonly question = signal<Question | undefined>(undefined);
+  readonly isEditMode = signal(false);
+  readonly isLoading = signal(false);
+  readonly isSaving = signal(false);
+  readonly error = signal('');
 
   readonly form = this.formBuilder.nonNullable.group({
     title: ['', Validators.required],
@@ -34,7 +34,7 @@ export class QuestionFormComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = Boolean(id);
+    this.isEditMode.set(Boolean(id));
 
     if (id) {
       this.loadQuestion(id);
@@ -42,12 +42,12 @@ export class QuestionFormComponent implements OnInit {
   }
 
   loadQuestion(id: string): void {
-    this.isLoading = true;
-    this.error = '';
+    this.isLoading.set(true);
+    this.error.set('');
 
     this.questionService.getQuestion(id).subscribe({
       next: (question) => {
-        this.question = question;
+        this.question.set(question);
         this.form.patchValue({
           title: question.title,
           question: question.question,
@@ -55,11 +55,11 @@ export class QuestionFormComponent implements OnInit {
           category: question.category,
           difficulty: question.difficulty,
         });
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
       error: () => {
-        this.error = 'Could not load question.';
-        this.isLoading = false;
+        this.error.set('Could not load question.');
+        this.isLoading.set(false);
       },
     });
   }
@@ -70,16 +70,17 @@ export class QuestionFormComponent implements OnInit {
       return;
     }
 
-    this.isSaving = true;
-    this.error = '';
+    this.isSaving.set(true);
+    this.error.set('');
     const input: QuestionInput = this.form.getRawValue();
+    const currentQuestion = this.question();
 
-    if (this.isEditMode && this.question) {
-      this.questionService.updateQuestion(this.question.id, input).subscribe({
+    if (this.isEditMode() && currentQuestion) {
+      this.questionService.updateQuestion(currentQuestion.id, input).subscribe({
         next: (updatedQuestion) => void this.router.navigate(['/questions', updatedQuestion.id]),
         error: () => {
-          this.error = 'Could not save changes.';
-          this.isSaving = false;
+          this.error.set('Could not save changes.');
+          this.isSaving.set(false);
         },
       });
       return;
@@ -88,28 +89,32 @@ export class QuestionFormComponent implements OnInit {
     this.questionService.createQuestion(input).subscribe({
       next: (createdQuestion) => void this.router.navigate(['/questions', createdQuestion.id]),
       error: () => {
-        this.error = 'Could not create question.';
-        this.isSaving = false;
+        this.error.set('Could not create question.');
+        this.isSaving.set(false);
       },
     });
   }
 
   deleteQuestion(): void {
-    if (!this.question || !confirm(`Delete "${this.question.title}"?`)) {
+    const currentQuestion = this.question();
+
+    if (!currentQuestion || !confirm(`Delete "${currentQuestion.title}"?`)) {
       return;
     }
 
-    this.questionService.deleteQuestion(this.question.id).subscribe({
+    this.questionService.deleteQuestion(currentQuestion.id).subscribe({
       next: () => void this.router.navigate(['/']),
       error: () => {
-        this.error = 'Could not delete question.';
+        this.error.set('Could not delete question.');
       },
     });
   }
 
   cancel(): void {
-    if (this.question) {
-      void this.router.navigate(['/questions', this.question.id]);
+    const currentQuestion = this.question();
+
+    if (currentQuestion) {
+      void this.router.navigate(['/questions', currentQuestion.id]);
       return;
     }
 
