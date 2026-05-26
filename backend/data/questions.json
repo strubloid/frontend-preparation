@@ -1,0 +1,15 @@
+[
+  {
+    "id": "afb69bbc-093a-45c7-b699-3bbbda34b41e",
+    "title": "Cookies, Local Storage, Session Storage",
+    "question": "What is the difference between:\nCookies\nLocal Storage\nSession Storage",
+    "answer": "123",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T09:59:47.200Z",
+    "updatedAt": "2026-05-26T09:59:47.200Z"
+  }
+]

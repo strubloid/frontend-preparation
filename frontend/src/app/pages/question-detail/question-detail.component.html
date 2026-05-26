@@ -1,0 +1,66 @@
+@if (isLoading()) {
+  <p class="panel">Loading question...</p>
+}
+
+@if (error()) {
+  <p class="panel error-message">{{ error() }}</p>
+}
+
+@if (viewModel$ | async; as viewModel) {
+  @if (!isLoading() && viewModel.question; as question) {
+    <section class="detail-card">
+      <div class="top-row">
+        <div>
+          <a routerLink="/" class="back-link">← Back</a>
+          <h1>{{ question.title }}</h1>
+          <div class="meta-row">
+            <span>{{ question.category || 'general' }}</span>
+            <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+          </div>
+        </div>
+
+        <a class="button secondary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
+      </div>
+
+      <article class="question-text">
+        <h2>Question</h2>
+        <p>{{ question.question }}</p>
+      </article>
+
+      @if (isAnswerVisible()) {
+        <article class="answer-text">
+          <h2>Answer</h2>
+          <p>{{ question.answer }}</p>
+        </article>
+      }
+
+      <div class="stats-row">
+        <span>Seen: <strong>{{ question.timesSeen }}</strong></span>
+        <span>Right: <strong>{{ question.correctCount }}</strong></span>
+        <span>Wrong: <strong>{{ question.wrongCount }}</strong></span>
+      </div>
+
+      @if (!isAnswerVisible()) {
+        <div class="actions">
+          <button type="button" class="button primary" (click)="showAnswer()">Show Answer</button>
+          <a class="button secondary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
+          <a class="button ghost" routerLink="/">Back</a>
+        </div>
+      }
+
+      @if (isAnswerVisible()) {
+        <div class="actions">
+          <button type="button" class="button success" (click)="markResult(question, 'right')">I got it right</button>
+          <button type="button" class="button danger" (click)="markResult(question, 'wrong')">I got it wrong</button>
+          <button type="button" class="button secondary" (click)="goToPrevious(question, viewModel.questions)">Previous</button>
+          <button type="button" class="button secondary" (click)="goToNext(question, viewModel.questions)">Next</button>
+          <button type="button" class="button ghost" (click)="toggleGenerationForm()">Generate Question</button>
+        </div>
+      }
+
+      @if (showGenerationForm()) {
+        <app-generation-request (closeForm)="closeGenerationForm()"></app-generation-request>
+      }
+    </section>
+  }
+}

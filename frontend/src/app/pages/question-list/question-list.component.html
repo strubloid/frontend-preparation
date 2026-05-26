@@ -1,0 +1,59 @@
+<section class="hero">
+  <div>
+    <p class="eyebrow">Study tool</p>
+    <h1>Question Trainer</h1>
+    <p>Store questions, reveal answers, and track your accuracy over time.</p>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="button secondary" (click)="toggleGenerationForm()">
+      Generate Question
+    </button>
+    <a class="button primary" routerLink="/questions/new">Create Question Manually</a>
+  </div>
+</section>
+
+@if (showGenerationForm()) {
+  <app-generation-request (closeForm)="closeGenerationForm()"></app-generation-request>
+}
+
+@if (isLoading()) {
+  <p class="status">Loading questions...</p>
+}
+
+@if (error()) {
+  <p class="error-message">{{ error() }}</p>
+}
+
+@if (questions$ | async; as questions) {
+  <section class="question-grid">
+    @if (questions.length === 0 && !isLoading()) {
+      <p class="empty-state">No questions found</p>
+    }
+
+    @for (question of questions; track question.id) {
+      <article class="question-card">
+        <div class="card-header">
+          <div>
+            <h2>{{ question.title }}</h2>
+            <p>{{ question.category || 'general' }}</p>
+          </div>
+          <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+        </div>
+
+        <div class="stats">
+          <span>Seen <strong>{{ question.timesSeen }}</strong></span>
+          <span>Right <strong>{{ question.correctCount }}</strong></span>
+          <span>Wrong <strong>{{ question.wrongCount }}</strong></span>
+          <span>Accuracy <strong>{{ accuracy(question) }}%</strong></span>
+        </div>
+
+        <div class="card-actions">
+          <a class="button primary" [routerLink]="['/questions', question.id]">Open</a>
+          <a class="button secondary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
+          <button type="button" class="button danger" (click)="deleteQuestion(question)">Delete</button>
+        </div>
+      </article>
+    }
+  </section>
+}
