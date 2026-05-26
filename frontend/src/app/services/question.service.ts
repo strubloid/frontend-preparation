@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenerationRequest, GenerationRequestInput, Question, QuestionInput } from '../models/question.model';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = '/api';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionService {

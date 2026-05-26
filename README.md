@@ -64,6 +64,42 @@ Angular prints the local URL, usually:
 http://localhost:4200
 ```
 
+### Access from a phone on the same network
+
+The Angular dev server is configured to listen on `0.0.0.0`, which is needed for network access. When running inside WSL, Windows may still expose the dev server only on Windows `localhost`. For phone testing, this project includes a small project-local TCP proxy:
+
+```txt
+frontend/proxy/question-trainer-proxy.js
+```
+
+Run Angular first:
+
+```bash
+cd frontend
+npm start
+```
+
+Then open a second terminal and run the Windows-side mobile proxy:
+
+```bash
+cd frontend
+npm run mobile-proxy:windows
+```
+
+Then open the app from your phone using your Windows LAN IP and port `9988`, for example:
+
+```txt
+http://192.168.0.37:9988
+```
+
+The proxy forwards:
+
+```txt
+0.0.0.0:9988 -> 127.0.0.1:4200
+```
+
+This proxy is for local development only. If the phone still cannot connect, check Windows Firewall and make sure the phone is not on a guest Wi-Fi network with client isolation enabled.
+
 ## Local JSON database
 
 The backend stores data in local JSON files:
@@ -188,8 +224,10 @@ npm start        # run compiled backend from dist/
 From `frontend/`:
 
 ```bash
-npm start        # run Angular dev server
-npm run build    # build Angular app
+npm start                 # run Angular dev server on 0.0.0.0:4200
+npm run mobile-proxy      # run project-local proxy from the current environment
+npm run mobile-proxy:windows # run the proxy with Windows Node for WSL phone testing
+npm run build             # build Angular app
 ```
 
 ## Notes about ChatGPT subscriptions and API billing

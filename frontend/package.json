@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "dev": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
+    "dev": "ng serve --host 0.0.0.0",
+    "mobile-proxy": "node proxy/question-trainer-proxy.js",
+    "mobile-proxy:windows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"node \\\"$(wslpath -w ./proxy/question-trainer-proxy.js)\\\"\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
