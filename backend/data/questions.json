@@ -89,5 +89,70 @@
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:36:35.204Z",
     "updatedAt": "2026-05-26T15:36:35.204Z"
+  },
+  {
+    "id": "b5f026f6-d757-444f-bc51-d19ef2ae5886",
+    "title": "5 libraries",
+    "question": "If you had to pick 5 libraries as dependencies for your Angular App which ones would you pick?",
+    "answer": "Prettier (eslint or tslint)\nAllows us to format our code, so everyone in the team can have the same code format, and get some issues done by the tslint\n\nAngular material \n\nJest\n\nSanitise (DOMSanitize)\n\nRXJS (observables)\n\n@elastic/elasticsearch",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T15:52:49.755Z",
+    "updatedAt": "2026-05-26T15:52:49.755Z"
+  },
+  {
+    "id": "708c2673-6bd0-442e-a96a-1134d63e0e9e",
+    "title": "Debugging",
+    "question": "What is your go-to strategy for debugging Angular Components?",
+    "answer": "UI erros \nI can log with string interpolation (or console log) some signals or state so I can see what was rendered, so I can have an idea of where is the bug itself\n\nI would likely add some debugger; statements at the points where the issue occurs so I can pause execution and inspect the data flowing through each involved element\n\nFrom there, I would inspect the component state, inputs, outputs, and data flow using source maps and browser developer tools to identify where the incorrect data is introduced, then fix the flow to ensure the application behaves correctly.\n\nIf is something injector related:\nI would use angular dev tools to see the injector hierarchy",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T16:00:37.408Z",
+    "updatedAt": "2026-05-26T16:02:06.895Z"
+  },
+  {
+    "id": "375c5635-d834-49c6-955b-1980842bdb97",
+    "title": "Rxjs - Operators",
+    "question": "Have you ever created a custom RxJS operator? What problem did you solve?",
+    "answer": "It was an operator that basically filtered out non-alphanumeric keystrokes.\n\nFor example, when working with an input, you may only want to react to numeric values or specific valid keys.\n\nThe reason for this was a dropdown component with custom search support. \n\nWhile the user types, we only want to trigger the search for relevant keys, and avoid running the search logic for keys like Shift, Ctrl, Arrow keys, or other keydown events that are not actual input characters.",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T16:11:51.660Z",
+    "updatedAt": "2026-05-26T16:11:51.660Z"
+  },
+  {
+    "id": "018d7774-f721-4835-8b7f-e7b82fe309b5",
+    "title": "Angular challenge",
+    "question": "What unconventional challenges did you have while developing/architecting Angular Apps?",
+    "answer": "One unconventional challenge:\n\nI had at Blocworx was transforming code that was heavily written inside HTML into a proper Angular application. \n\nI had to analyze the existing structure, understand the behavior hidden in the markup, and move that logic into Angular components, services, bindings, and reusable patterns.\n\nThe challenge was not just migration, but improving the architecture so the application became easier to maintain, test, and extend.",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T16:16:49.443Z",
+    "updatedAt": "2026-05-26T16:16:49.443Z"
+  },
+  {
+    "id": "51785327-a828-4079-aa75-69ef85ae8958",
+    "title": "Optimization of large Angular Components",
+    "question": "What is your approach to optimizing the performance of large angular components?",
+    "answer": "My approach is first understanding why the component is slow by inspecting templates, bindings, subscriptions, loops, and change detection. \n\nThen I reduce complexity by splitting large components into smaller ones and optimizing rendering with techniques like OnPush, trackBy, proper observable cleanup, and moving heavy logic outside the template.\n\nFor me, optimization is also about improving maintainability and readability, not only speed.\n\nI also would check if something super big is stucking, if does I would defer and lazy load.",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T16:23:32.682Z",
+    "updatedAt": "2026-05-26T16:25:01.391Z"
   }
 ]
