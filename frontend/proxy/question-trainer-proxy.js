@@ -4,6 +4,7 @@ const listenHost = process.env.MOBILE_PROXY_HOST || '0.0.0.0';
 const listenPort = Number(process.env.MOBILE_PROXY_PORT || 9999);
 const targetHost = process.env.MOBILE_PROXY_TARGET_HOST || '127.0.0.1';
 const targetPort = Number(process.env.MOBILE_PROXY_TARGET_PORT || 4200);
+const publicHost = process.env.MOBILE_PROXY_PUBLIC_HOST || 'questions.home';
 
 const server = net.createServer((clientSocket) => {
   const upstreamSocket = net.createConnection({ host: targetHost, port: targetPort });
@@ -22,6 +23,7 @@ const server = net.createServer((clientSocket) => {
 
 server.listen(listenPort, listenHost, () => {
   console.log(`Question Trainer mobile proxy listening on http://${listenHost}:${listenPort}`);
+  console.log(`Preferred project URL: http://${publicHost}:${listenPort}`);
   console.log(`Forwarding to http://${targetHost}:${targetPort}`);
 });
 

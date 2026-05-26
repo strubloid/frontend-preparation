@@ -4,6 +4,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 PORT=9999
+PUBLIC_HOST=questions.home
 
 mobile_proxy_pid=""
 
@@ -37,9 +38,10 @@ start_wsl_mobile_proxy() {
     return 0
   fi
 
-  MOBILE_PROXY_PORT="${PORT}" node "${proxy_script}" &
+  MOBILE_PROXY_PORT="${PORT}" MOBILE_PROXY_PUBLIC_HOST="${PUBLIC_HOST}" node "${proxy_script}" &
   mobile_proxy_pid="$!"
   echo "Mobile proxy started in WSL on port ${PORT}."
+  echo "Project URL target: http://${PUBLIC_HOST}:${PORT}"
 }
 
 start_windows_mobile_proxy() {
@@ -47,9 +49,10 @@ start_windows_mobile_proxy() {
   local proxy_script_windows
   proxy_script_windows="$(wslpath -w "${proxy_script}")"
 
-  powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "\$env:MOBILE_PROXY_PORT='${PORT}'; node \"${proxy_script_windows}\"" &
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "\$env:MOBILE_PROXY_PORT='${PORT}'; \$env:MOBILE_PROXY_PUBLIC_HOST='${PUBLIC_HOST}'; node \"${proxy_script_windows}\"" &
   mobile_proxy_pid="$!"
   echo "Mobile proxy started in Windows on port ${PORT}."
+  echo "Project URL target: http://${PUBLIC_HOST}:${PORT}"
 }
 
 start_mobile_proxy() {
@@ -71,6 +74,8 @@ start_mobile_proxy() {
   start_wsl_mobile_proxy
 }
 
+echo "Project mobile URL target: http://${PUBLIC_HOST}:${PORT}"
+echo "Note: this project can serve that address after the device resolves ${PUBLIC_HOST} to this computer."
 read -r -p "Start mobile proxy for phone access on port ${PORT}? [y/N] " start_proxy_answer
 
 case "${start_proxy_answer}" in

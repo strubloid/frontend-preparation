@@ -61,6 +61,9 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "host": "0.0.0.0",
+            "allowedHosts": [
+              "questions.home"
+            ],
             "proxyConfig": "proxy.conf.json"
           },
           "configurations": {

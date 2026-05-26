@@ -86,7 +86,13 @@ cd frontend
 npm run mobile-proxy:windows
 ```
 
-Then open the app from your phone using your Windows LAN IP and the proxy port. The default port used by `frontend/bash/local-dev.sh` is `9999`:
+The project-local preferred mobile URL is:
+
+```txt
+http://questions.home:9999
+```
+
+The proxy serves traffic on port `9999` and is ready for that hostname, but hostname resolution happens on your phone/router before this project receives the request. This project does not write system DNS, router DNS, Windows hosts files, or other machine configuration outside the repository. If `questions.home` is not already resolvable on your network, use your Windows LAN IP with the same port instead:
 
 ```txt
 http://192.168.0.37:9999
@@ -98,7 +104,7 @@ The proxy forwards:
 0.0.0.0:9999 -> 127.0.0.1:4200
 ```
 
-`frontend/bash/local-dev.sh` sets `MOBILE_PROXY_PORT` from its `PORT` variable before starting `frontend/proxy/question-trainer-proxy.js`. To change the phone-access port for `npm run dev`, update `PORT` in `frontend/bash/local-dev.sh`.
+`frontend/bash/local-dev.sh` sets `MOBILE_PROXY_PORT` from its `PORT` variable and `MOBILE_PROXY_PUBLIC_HOST` from its `PUBLIC_HOST` variable before starting `frontend/proxy/question-trainer-proxy.js`. To change the phone-access port for `npm run dev`, update `PORT` in `frontend/bash/local-dev.sh`.
 
 This proxy is for local development only. If the phone still cannot connect, check Windows Firewall and make sure the phone is not on a guest Wi-Fi network with client isolation enabled.
 
