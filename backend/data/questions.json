@@ -154,5 +154,18 @@
     "wrongCount": 0,
     "createdAt": "2026-05-26T16:23:32.682Z",
     "updatedAt": "2026-05-26T16:25:01.391Z"
+  },
+  {
+    "id": "d08c22de-ddf6-4ef5-864a-08124bde0408",
+    "title": "Large Angular application",
+    "question": "How do you usually structure large Angular applications to keep them scalable and maintainable over time?",
+    "answer": "I usually organize Angular projects by features, not only by technical folders.\n\nFor example:\n- auth\n- dashboard\n- users\n- questions\n\nEach feature contains its own:\n- components\n- services\n- routes\n- models\n\nI keep reusable things separated into a shared area:\n- shared components\n- pipes\n- directives\n- utility functions\n\nCore application logic stays in a core area:\n- authentication\n- guards\n- interceptors\n\nAPI configuration\nI also try to keep responsibilities small:\n- avoid massive components\n- avoid services doing too many things\n- split logic when needed\n\nMy main goal is:\n- easier maintenance\n- easier onboarding for developers\n- easier testing\n- clearer project structure\n- better long-term scalability",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-26T19:15:49.896Z",
+    "updatedAt": "2026-05-26T19:15:49.896Z"
   }
 ]
