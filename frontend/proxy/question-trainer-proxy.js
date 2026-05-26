@@ -1,7 +1,7 @@
 const net = require('node:net');
 
 const listenHost = process.env.MOBILE_PROXY_HOST || '0.0.0.0';
-const listenPort = Number(process.env.MOBILE_PROXY_PORT || 9988);
+const listenPort = Number(process.env.MOBILE_PROXY_PORT || 9999);
 const targetHost = process.env.MOBILE_PROXY_TARGET_HOST || '127.0.0.1';
 const targetPort = Number(process.env.MOBILE_PROXY_TARGET_PORT || 4200);
 

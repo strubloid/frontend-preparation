@@ -86,17 +86,19 @@ cd frontend
 npm run mobile-proxy:windows
 ```
 
-Then open the app from your phone using your Windows LAN IP and port `9988`, for example:
+Then open the app from your phone using your Windows LAN IP and the proxy port. The default port used by `frontend/bash/local-dev.sh` is `9999`:
 
 ```txt
-http://192.168.0.37:9988
+http://192.168.0.37:9999
 ```
 
 The proxy forwards:
 
 ```txt
-0.0.0.0:9988 -> 127.0.0.1:4200
+0.0.0.0:9999 -> 127.0.0.1:4200
 ```
+
+`frontend/bash/local-dev.sh` sets `MOBILE_PROXY_PORT` from its `PORT` variable before starting `frontend/proxy/question-trainer-proxy.js`. To change the phone-access port for `npm run dev`, update `PORT` in `frontend/bash/local-dev.sh`.
 
 This proxy is for local development only. If the phone still cannot connect, check Windows Firewall and make sure the phone is not on a guest Wi-Fi network with client isolation enabled.
 
@@ -225,6 +227,7 @@ From `frontend/`:
 
 ```bash
 npm start                 # run Angular dev server on 0.0.0.0:4200
+npm run dev               # ask whether to start the mobile proxy, then run Angular
 npm run mobile-proxy      # run project-local proxy from the current environment
 npm run mobile-proxy:windows # run the proxy with Windows Node for WSL phone testing
 npm run build             # build Angular app

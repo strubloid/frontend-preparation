@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
-    "dev": "ng serve --host 0.0.0.0",
+    "dev": "./bash/local-dev.sh",
+    "local": "./bash/local-dev.sh",
     "mobile-proxy": "node proxy/question-trainer-proxy.js",
     "mobile-proxy:windows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"node \\\"$(wslpath -w ./proxy/question-trainer-proxy.js)\\\"\"",
     "build": "ng build",
