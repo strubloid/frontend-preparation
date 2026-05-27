@@ -339,5 +339,31 @@
     "wrongCount": 0,
     "createdAt": "2026-05-27T15:18:33.250Z",
     "updatedAt": "2026-05-27T15:31:03.221Z"
+  },
+  {
+    "id": "e681d35a-c5c6-4c64-a79e-eb08f319ac01",
+    "title": "Security practices",
+    "question": "What security practices and libraries do you use in Angular applications?",
+    "answer": "- For authentication and authorization, I usually work with:\n  - JWT authentication\n  - route guards\n  - HTTP interceptors\n\n- Libraries and tools I commonly use:\n  - @auth0/angular-jwt\n    - helps manage JWT tokens\n    - automatically attaches tokens to requests\n  - Angular Router Guards\n    - protect routes based on authentication or roles\n  - HttpInterceptor\n    - centralize token handling\n    - handle 401 and 403 errors\n    - avoid duplicating security logic\n\n- For form security and validation:\n  - Angular Reactive Forms\n    - validation\n    - sanitization\n    - controlled form state\n\n- For XSS protection:\n  - I rely mostly on Angular built-in sanitization\n  - avoid dangerous things like:\n    - direct DOM manipulation\n    - unsafe innerHTML\n\n- For API security:\n  - HTTPS only\n  - secure headers from backend\n  - proper CORS configuration\n\n- For dependency security:\n  - npm audit\n  - Snyk sometimes\n  - keeping packages updated\n\n- My approach is always:\n  - frontend improves security experience\n  - backend enforces the real security rules",
+    "category": "Angular",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T15:34:35.378Z",
+    "updatedAt": "2026-05-27T15:34:55.780Z"
+  },
+  {
+    "id": "620a25f7-7bc5-480d-9a0b-df2ed332bd3f",
+    "title": "XSS sanitization",
+    "question": "What libraries do you use for XSS sanitization in Angular?",
+    "answer": "- In Angular, the most common protection already comes built into the framework through:\n  - DomSanitizer\n\n- Angular automatically sanitizes many things in templates, which already helps prevent XSS attacks.\n\n- When additional sanitization is needed, the most common library I see being used is:\n  - DOMPurify\n\n- DOMPurify is widely used to sanitize:\n  - HTML content\n  - rich text editor output\n  - user-generated content\n\n- Example use cases:\n  - comments\n  - CMS content\n  - markdown rendering\n  - dynamic HTML from APIs\n\n- My approach is:\n  - trust Angular built-in sanitization first\n  - use DOMPurify when handling dynamic or external HTML content\n  - avoid bypassing Angular security unless absolutely necessary",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T15:36:50.791Z",
+    "updatedAt": "2026-05-27T15:36:50.791Z"
   }
 ]

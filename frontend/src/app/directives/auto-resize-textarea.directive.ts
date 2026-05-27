@@ -6,9 +6,10 @@ import { AfterViewInit, Directive, DoCheck, ElementRef, HostListener, inject } f
 export class AutoResizeTextareaDirective implements AfterViewInit, DoCheck {
   private readonly elementRef = inject<ElementRef<HTMLTextAreaElement>>(ElementRef);
   private lastValue = '';
+  private readonly minimumHeight = 192;
 
   ngAfterViewInit(): void {
-    this.resizeToContent();
+    this.syncGroupHeights();
   }
 
   ngDoCheck(): void {
@@ -16,28 +17,52 @@ export class AutoResizeTextareaDirective implements AfterViewInit, DoCheck {
 
     if (currentValue !== this.lastValue) {
       this.lastValue = currentValue;
-      this.resizeToContent();
+      this.syncGroupHeights();
     }
   }
 
   @HostListener('input')
   onInput(): void {
     this.lastValue = this.textarea.value;
-    this.resizeToContent();
+    this.syncGroupHeights();
   }
 
   @HostListener('window:resize')
   onWindowResize(): void {
-    this.resizeToContent();
+    this.syncGroupHeights();
   }
 
   private get textarea(): HTMLTextAreaElement {
     return this.elementRef.nativeElement;
   }
 
-  private resizeToContent(): void {
-    const textarea = this.textarea;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${Math.max(textarea.scrollHeight, 192)}px`;
+  private syncGroupHeights(): void {
+    const textareas = this.getSynchronizedTextareas();
+
+    for (const textarea of textareas) {
+      textarea.style.height = 'auto';
+    }
+
+    const targetHeight = Math.max(
+      this.minimumHeight,
+      ...textareas.map((textarea) => textarea.scrollHeight),
+    );
+
+    for (const textarea of textareas) {
+      textarea.style.height = `${targetHeight}px`;
+    }
+  }
+
+  private getSynchronizedTextareas(): HTMLTextAreaElement[] {
+    const group = this.textarea.closest('.field-grid-double');
+
+    if (!group) {
+      return [this.textarea];
+    }
+
+    const textareas = Array.from(group.querySelectorAll('textarea[appAutoResizeTextarea]')).filter(
+      (element): element is HTMLTextAreaElement => element instanceof HTMLTextAreaElement,
+    );
+    return textareas.length > 0 ? textareas : [this.textarea];
   }
 }
