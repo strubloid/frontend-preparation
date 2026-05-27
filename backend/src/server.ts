@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import path from "path";
+import { publicDirectory } from "./runtime-paths.js";
 import { QuestionFileDbService } from "./services/question-file-db.service.js";
 import { LocalQuestionGeneratorService } from "./services/question-generator.service.js";
 import { isValidDifficulty, validateGenerationRequestBody, validateQuestionBody } from "./validation.js";
@@ -18,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static frontend files
-const publicPath = path.join(__dirname, "public");
+const publicPath = publicDirectory;
 app.use(express.static(publicPath));
 
 app.get("/api/health", (_request, response) => {

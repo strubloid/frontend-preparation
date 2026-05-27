@@ -2,8 +2,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { GenerationRequest, GenerationRequestInput, GenerationRequestStatus } from '../models/generation-request.model.js';
+import { dataDirectory } from '../runtime-paths.js';
 
-const dataDirectory = path.resolve(process.cwd(), 'data');
 const generationRequestsFile = path.join(dataDirectory, 'generation-requests.json');
 
 export class GenerationRequestFileDbService {

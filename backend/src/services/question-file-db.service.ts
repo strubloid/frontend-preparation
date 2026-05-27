@@ -2,8 +2,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { AnswerResult, Question, QuestionInput } from '../models/question.model.js';
+import { dataDirectory } from '../runtime-paths.js';
 
-const dataDirectory = path.resolve(process.cwd(), 'data');
 const questionsFile = path.join(dataDirectory, 'questions.json');
 
 export class QuestionFileDbService {

@@ -13,7 +13,9 @@ RUN cd frontend && npm install
 
 # Copy source code
 COPY backend/src ./backend/src
+COPY backend/data ./backend/data
 COPY backend/tsconfig.json ./backend/
+COPY prompts ./prompts
 COPY frontend/src ./frontend/src
 COPY frontend/angular.json ./frontend/
 COPY frontend/tsconfig*.json ./frontend/
@@ -36,6 +38,10 @@ RUN cd backend && npm ci --omit=dev
 
 # Copy built backend
 COPY --from=builder /app/backend/dist ./backend/dist
+
+# Copy seeded backend data and prompts for runtime file access
+COPY --from=builder /app/backend/data ./backend/data
+COPY --from=builder /app/prompts ./prompts
 
 # Copy built frontend to public directory
 COPY --from=builder /app/frontend/dist/frontend/browser ./backend/dist/public

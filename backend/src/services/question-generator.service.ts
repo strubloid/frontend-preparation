@@ -8,10 +8,9 @@ import { Question, QuestionInput } from '../models/question.model.js';
 import { GeneratedQuestionPayload, GenerationRequestInput } from '../models/generation-request.model.js';
 import { QuestionFileDbService } from './question-file-db.service.js';
 import { validDifficulties } from '../validation.js';
+import { projectRoot, questionGenerationPromptFile } from '../runtime-paths.js';
 
 const execFileAsync = promisify(execFile);
-const promptFile = path.resolve(process.cwd(), '../prompts/question-generation.prompt.md');
-const projectRoot = path.resolve(process.cwd(), '..');
 const codexReadyCacheTtlMs = 30_000;
 const codexFastFailTimeoutMs = 2_000;
 const codexGenerationTimeoutMs = 15_000;
@@ -48,7 +47,7 @@ export class LocalQuestionGeneratorService implements QuestionGeneratorService {
     existingQuestions: Question[],
   ): Promise<GeneratedQuestionPayload> {
     const tempOutputFile = path.join(os.tmpdir(), `codex-question-${randomUUID()}.json`);
-    const promptContract = await readFile(promptFile, 'utf8');
+    const promptContract = await readFile(questionGenerationPromptFile, 'utf8');
     const generationInstructions = [
       'Generate exactly one interview study question for this app.',
       'Use the attached rules file as the strict output contract.',
