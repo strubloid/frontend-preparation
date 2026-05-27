@@ -33,7 +33,7 @@
   </form>
 
   <p class="generation-panel__hint">
-    This creates a question directly in the bank. If Codex is unavailable, the backend will still create a usable study question instead of leaving the request hanging.
+    This creates a question directly in the bank. If AI is unavailable, the app falls back immediately to a concise local question so the request never feels stuck.
   </p>
 
   @if (message()) {

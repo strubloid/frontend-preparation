@@ -12,6 +12,11 @@ import { validDifficulties } from '../validation.js';
 const execFileAsync = promisify(execFile);
 const promptFile = path.resolve(process.cwd(), '../prompts/question-generation.prompt.md');
 const projectRoot = path.resolve(process.cwd(), '..');
+const codexReadyCacheTtlMs = 30_000;
+const codexFastFailTimeoutMs = 2_000;
+const codexGenerationTimeoutMs = 15_000;
+
+let cachedCodexReadyState: { checkedAt: number; isReady: boolean } | null = null;
 
 export interface QuestionGeneratorService {
   createQuestionFromTopic(input: GenerationRequestInput): Promise<Question>;
@@ -22,6 +27,12 @@ export class LocalQuestionGeneratorService implements QuestionGeneratorService {
 
   async createQuestionFromTopic(input: GenerationRequestInput): Promise<Question> {
     const existingQuestions = await this.questionDb.getAll();
+    const shouldTryCodex = await this.isCodexReady();
+
+    if (!shouldTryCodex) {
+      const fallbackQuestion = this.generateFallbackQuestion(input, existingQuestions);
+      return this.questionDb.createWithId(fallbackQuestion, randomUUID());
+    }
 
     try {
       const generatedQuestion = await this.generateQuestionWithCodex(input, existingQuestions);
@@ -44,8 +55,9 @@ export class LocalQuestionGeneratorService implements QuestionGeneratorService {
       `Topic: ${input.topic.trim()}`,
       `Requested category: ${input.category.trim()}`,
       `Requested difficulty: ${input.difficulty}`,
-      'Avoid duplicating any existing question titles or question bodies from the list below.',
-      `Existing questions: ${JSON.stringify(existingQuestions.map((question) => ({ title: question.title, question: question.question, category: question.category, difficulty: question.difficulty })))}`,
+      'Avoid duplicating any existing question titles from the list below.',
+      `Existing question titles: ${JSON.stringify(existingQuestions.map((question) => question.title).slice(-80))}`,
+      'Keep the answer concise but useful for interview practice.',
       'Return only valid JSON with title, question, answer, category, difficulty.',
     ].join('\n');
     const codexPrompt = [promptContract.trim(), '', generationInstructions].join('\n');
@@ -71,7 +83,7 @@ export class LocalQuestionGeneratorService implements QuestionGeneratorService {
         {
           cwd: projectRoot,
           env: process.env,
-          timeout: 120000,
+          timeout: codexGenerationTimeoutMs,
           maxBuffer: 1024 * 1024,
         },
       );
@@ -92,6 +104,28 @@ export class LocalQuestionGeneratorService implements QuestionGeneratorService {
       throw error instanceof Error ? error : new Error('Codex generation failed.');
     } finally {
       await unlink(tempOutputFile).catch(() => undefined);
+    }
+  }
+
+  private async isCodexReady(): Promise<boolean> {
+    const now = Date.now();
+    if (cachedCodexReadyState && now - cachedCodexReadyState.checkedAt < codexReadyCacheTtlMs) {
+      return cachedCodexReadyState.isReady;
+    }
+
+    try {
+      await execFileAsync('codex', ['login', 'status'], {
+        cwd: projectRoot,
+        env: process.env,
+        timeout: codexFastFailTimeoutMs,
+        maxBuffer: 32 * 1024,
+      });
+
+      cachedCodexReadyState = { checkedAt: now, isReady: true };
+      return true;
+    } catch {
+      cachedCodexReadyState = { checkedAt: now, isReady: false };
+      return false;
     }
   }
 

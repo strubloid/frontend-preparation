@@ -10,13 +10,9 @@
   <section class="questions-page" [attr.data-accent]="viewModel.categoryAccent">
     <header class="page-header">
       <div class="page-header__copy">
-        <p class="eyebrow">Interview question bank</p>
         <div>
-          <h1>One-page practice flow with premium card browsing and a category-aware story lane.</h1>
-          <p>
-            Inspired by crisp product UIs: strong hierarchy, focused spotlight, and a visual lane that
-            alternates left and right while categories get their own accent treatment.
-          </p>
+          <h1>One-page practice flow with responsive content.</h1>
+          <p>This was created to practice test before some interviews</p>
         </div>
       </div>
 
@@ -62,41 +58,36 @@
     } @else {
       <section class="category-filter-panel">
         <div class="section-heading section-heading-split">
-          <div>
-            <p class="eyebrow">Categories</p>
-            <h2>Filter the story lane, don’t break the layout.</h2>
-            <p>Every category keeps the same structure, but gets a different accent and visual rhythm.</p>
-          </div>
-
+          <p class="eyebrow">Categories</p>
           <div class="section-summary-chip">
             <span>{{ viewModel.filteredQuestions.length }}</span>
-            <small>questions in view</small>
+            <small>questions</small>
           </div>
-        </div>
 
-        <div class="category-filter-list">
-          <button
-            type="button"
-            class="category-chip"
-            [class.category-chip-active]="viewModel.effectiveCategorySlug === 'all'"
-            (click)="selectCategory('all')"
-          >
-            <span>All</span>
-            <strong>{{ viewModel.stats.totalQuestions }}</strong>
-          </button>
-
-          @for (category of viewModel.categories; track category.slug) {
+          <div class="category-filter-list">
             <button
               type="button"
               class="category-chip"
-              [class.category-chip-active]="viewModel.effectiveCategorySlug === category.slug"
-              (click)="selectCategory(category.slug)"
+              [class.category-chip-active]="viewModel.effectiveCategorySlug === 'all'"
+              (click)="selectCategory('all')"
             >
-              <span>{{ category.label }}</span>
-              <strong>{{ category.count }}</strong>
-              <small>{{ category.averageAccuracy }}% avg.</small>
+              <span>All</span>
+              <strong>{{ viewModel.stats.totalQuestions }}</strong>
             </button>
-          }
+
+            @for (category of viewModel.categories; track category.slug) {
+              <button
+                type="button"
+                class="category-chip"
+                [class.category-chip-active]="viewModel.effectiveCategorySlug === category.slug"
+                (click)="selectCategory(category.slug)"
+              >
+                <span>{{ category.label }}</span>
+                <strong>{{ category.count }}</strong>
+                <small>{{ category.averageAccuracy }}% avg.</small>
+              </button>
+            }
+          </div>
         </div>
       </section>
 
@@ -117,13 +108,17 @@
             <div class="browser-stage__header">
               <div>
                 <p class="eyebrow">Spotlight browser</p>
-                <h2>Move around the questions without leaving the flow.</h2>
+                <h2>Move fast between questions without leaving the page.</h2>
               </div>
 
               <div class="browser-stage__meta">
                 <span>Use ← and → to navigate</span>
                 @if (viewModel.activeQuestion; as activeQuestion) {
-                  <button type="button" class="button button-ghost" (click)="openQuestion(activeQuestion.id)">
+                  <button
+                    type="button"
+                    class="button button-ghost"
+                    (click)="openQuestion(activeQuestion.id)"
+                  >
                     Open full detail
                   </button>
                 }
@@ -147,8 +142,8 @@
               <p>
                 {{
                   viewModel.effectiveCategorySlug === 'all'
-                    ? 'You are browsing the whole bank in one cinematic flow.'
-                    : 'You are focused on a single category with a dedicated visual accent.'
+                    ? 'You are browsing the full bank in a single responsive flow.'
+                    : 'You are focused on one category with its own visual accent.'
                 }}
               </p>
 
@@ -159,7 +154,9 @@
                 </article>
                 <article>
                   <span>Remaining</span>
-                  <strong>{{ viewModel.filteredQuestions.length - (viewModel.activeIndex + 1) }}</strong>
+                  <strong>{{
+                    viewModel.filteredQuestions.length - (viewModel.activeIndex + 1)
+                  }}</strong>
                 </article>
                 <article>
                   <span>Seen</span>
@@ -173,7 +170,10 @@
 
               <div class="browser-side-panel__tags">
                 <span class="badge badge-category">{{ activeQuestion.categoryLabel }}</span>
-                <span class="difficulty-tag" [class]="'difficulty-tag ' + activeQuestion.difficulty">
+                <span
+                  class="difficulty-tag"
+                  [class]="'difficulty-tag ' + activeQuestion.difficulty"
+                >
                   {{ activeQuestion.difficulty }}
                 </span>
               </div>
@@ -184,9 +184,12 @@
         <section class="lane-section">
           <div class="section-heading section-heading-split">
             <div>
-              <p class="eyebrow">Story lane</p>
-              <h2>Questions alternate left and right to feel alive on one page.</h2>
-              <p>Different categories keep different accents, so future categories won’t look identical.</p>
+              <p class="eyebrow">Storyline</p>
+              <h2>Compact cards below the spotlight for quick scanning.</h2>
+              <p>
+                Desktop keeps a lively stagger. Tablet softens it. Mobile becomes a single readable
+                rail with compact previews.
+              </p>
             </div>
           </div>
 
@@ -209,7 +212,10 @@
                   <div class="lane-card__top">
                     <div class="lane-card__tags">
                       <span class="badge badge-category">{{ question.categoryLabel }}</span>
-                      <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">
+                      <span
+                        class="difficulty-tag"
+                        [class]="'difficulty-tag ' + question.difficulty"
+                      >
                         {{ question.difficulty }}
                       </span>
                     </div>
@@ -227,7 +233,11 @@
                 </button>
 
                 <div class="lane-item__actions">
-                  <button type="button" class="button button-ghost" (click)="openQuestion(question.id)">
+                  <button
+                    type="button"
+                    class="button button-ghost"
+                    (click)="openQuestion(question.id)"
+                  >
                     Open
                   </button>
                 </div>

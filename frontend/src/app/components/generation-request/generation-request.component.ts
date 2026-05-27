@@ -41,6 +41,7 @@ export class GenerationRequestComponent {
         this.message.set(`Question created: ${question.title}`);
         this.form.reset({ topic: '', category: 'frontend', difficulty: 'medium' });
         this.isSubmitting.set(false);
+        this.closeForm.emit();
       },
       error: () => {
         this.error.set('Could not generate a question. Make sure the backend is running.');
