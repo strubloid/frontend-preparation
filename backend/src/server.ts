@@ -1,11 +1,14 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { QuestionFileDbService } from './services/question-file-db.service.js';
 import { LocalQuestionGeneratorService } from './services/question-generator.service.js';
 import { isValidDifficulty, validateGenerationRequestBody, validateQuestionBody } from './validation.js';
 import { AnswerResult, QuestionInput } from './models/question.model.js';
 import { GenerationRequestInput } from './models/generation-request.model.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
 
@@ -14,6 +17,10 @@ const questionGeneratorService = new LocalQuestionGeneratorService(questionDb);
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static frontend files
+const publicPath = path.join(__dirname, 'public');
+app.use(express.static(publicPath));
 
 app.get('/api/health', (_request, response) => {
   response.json({ status: 'ok' });
@@ -134,6 +141,11 @@ app.post('/api/generation-requests', async (request, response, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// Fallback route for Angular SPA - serve index.html for all non-API routes
+app.get('*', (_request, response) => {
+  response.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.use((error: Error, _request: Request, response: Response, _next: NextFunction) => {
