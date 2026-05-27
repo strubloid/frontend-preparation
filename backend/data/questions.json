@@ -42,14 +42,14 @@
     "id": "db252ae7-f980-49d0-a23f-f992cbbd926b",
     "title": "Code quality",
     "question": "How would you manage code quality in a large scale frontend application? \n\nWhat tools would you use?",
-    "answer": "Code quality \n\nLinter\nCan catch small issues and make sure everybody writes the same code (prettier, eslint, tslint for typescript)\n- a11y : this you setup to force in your linter side to deal with accessibility \n\nUnit test \n- e2e test\n\nDependency Scan \nWe ensure that our dependencies do not have any attacks, so we scan to be sure\n\nLighthouse/ Sentry\nThey will tell you how your core web vitals change over time",
+    "answer": "I would manage code quality using a mix of standards, automation, testing, security checks, and monitoring.\n\n1. Code standards\n\nI would use:\n\n- ESLint\n- Prettier\n- TypeScript strict mode\n- Angular style guide rules\n\nThese tools help keep the code consistent across the team and catch small problems early, before code review.\n\nI would also include accessibility rules in the lint setup, so the team can catch common a11y issues during development.\n\n2. Testing\n\nI would use different levels of testing:\n\n- Unit tests for components, services, pipes, and utilities\n- Integration tests for connected frontend flows\n- E2E tests for critical user journeys\n\nFor Angular, this could include:\n\n- Jest or Karma for unit tests\n- Cypress or Playwright for E2E tests\n\nThe goal is not to test everything blindly, but to protect the most important business flows.\n\n3. Dependency security\n\nI would use dependency scanning tools like:\n\n- npm audit\n- Snyk\n- Dependabot\n\nThis helps detect vulnerable or outdated packages before they become a security risk.\n\n4. CI/CD checks\n\nI would make quality checks part of the pipeline:\n\n- lint\n- format check\n- unit tests\n- build validation\n- dependency scan\n- E2E tests for important flows\n\nThis avoids relying only on developers remembering to run checks locally.\n\n5. Performance and monitoring\n\nI would use tools like:\n\n- Lighthouse Metrics\n- Google Pagespeed\n\nThese tools help track frontend performance, runtime errors, and user experience problems after deployment.\n\nInterview answer\n\nIn a large-scale Angular application, I would manage code quality by combining automated checks and team standards. I would use ESLint, Prettier, TypeScript strict mode, and accessibility lint rules to keep the code consistent. I would add unit tests and E2E tests to protect important flows, use dependency scanning tools like Snyk or Dependabot for package security, and enforce everything through the CI pipeline. After deployment, I would also use tools like Lighthouse Metrics or Google Pagespeed to monitor performance.",
     "category": "Angular",
     "difficulty": "hard",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:18:22.668Z",
-    "updatedAt": "2026-05-27T15:02:24.217Z"
+    "updatedAt": "2026-05-27T18:21:12.896Z"
   },
   {
     "id": "396774f5-7026-4455-8ce0-107362622daa",
@@ -58,11 +58,12 @@
     "answer": "Cross Side Scripting \nThe attacker persist some code into the project database \n\nThe users fetch things into the database can fetch this code\n\nExample:\nFacebook\n- people could add JavaScript code as a comment\n- while people opening the thread, they would need to load all comments, making it run the malicious script \n\n\nHow to prevent?\n\n1- sanitize the inputs ( we avoid the process of allowing to add this as JavaScript)\n2- we remove the option for users render any HTML/js, so even if is stored, it wouldn't run the malicious code",
     "category": "Frontend",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:27:04.354Z",
-    "updatedAt": "2026-05-26T15:27:04.354Z"
+    "updatedAt": "2026-05-27T18:10:23.055Z",
+    "lastAnsweredAt": "2026-05-27T18:10:23.055Z"
   },
   {
     "id": "6067e9a2-c1f3-4bd5-bc34-af3a8b614c09",
@@ -71,11 +72,12 @@
     "answer": "CDN - content delivery network \nThis is basically a network of servers around the world that replicate the website, so if someone is too far away from the current server they would be using a cached version into the edge location at CDN, and those would only update when we lunch new versions of the system. \n\nCommon Providers \n- Claudfare \n- AWS Cloud Front \n- Azure CDN",
     "category": "Frontend",
     "difficulty": "easy",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:31:44.614Z",
-    "updatedAt": "2026-05-26T15:31:44.614Z"
+    "updatedAt": "2026-05-27T18:08:14.780Z",
+    "lastAnsweredAt": "2026-05-27T18:08:14.780Z"
   },
   {
     "id": "cf1ee37e-ce4a-4bc6-aede-2501fff8aaac",
@@ -84,11 +86,12 @@
     "answer": "Micro frontends \nThey are the solution as a split of one project into multiple ones, those micro-frontends are managed by the application (increase complexity), and they allow multiple people to work in a bigger project. \n\nWhen would we use? \nWhen a company grows so much the quantity of front end developers that are the need to split the code so people can work separately without the worry of breaking the main code.",
     "category": "Frontend",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:36:35.204Z",
-    "updatedAt": "2026-05-26T15:36:35.204Z"
+    "updatedAt": "2026-05-27T18:06:55.658Z",
+    "lastAnsweredAt": "2026-05-27T18:06:55.658Z"
   },
   {
     "id": "b5f026f6-d757-444f-bc51-d19ef2ae5886",
@@ -97,11 +100,12 @@
     "answer": "Prettier (eslint or tslint)\nAllows us to format our code, so everyone in the team can have the same code format, and get some issues done by the tslint\n\nAngular material \n\nJest\n\nSanitise (DOMSanitize)\n\nRXJS (observables)\n\n@elastic/elasticsearch",
     "category": "Angular",
     "difficulty": "easy",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:52:49.755Z",
-    "updatedAt": "2026-05-27T15:03:02.025Z"
+    "updatedAt": "2026-05-27T18:04:59.767Z",
+    "lastAnsweredAt": "2026-05-27T18:04:59.767Z"
   },
   {
     "id": "708c2673-6bd0-442e-a96a-1134d63e0e9e",
@@ -110,11 +114,12 @@
     "answer": "UI erros \nI can log with string interpolation (or console log) some signals or state so I can see what was rendered, so I can have an idea of where is the bug itself\n\nI would likely add some debugger; statements at the points where the issue occurs so I can pause execution and inspect the data flowing through each involved element\n\nFrom there, I would inspect the component state, inputs, outputs, and data flow using source maps and browser developer tools to identify where the incorrect data is introduced, then fix the flow to ensure the application behaves correctly.\n\nIf is something injector related:\nI would use angular dev tools to see the injector hierarchy",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T16:00:37.408Z",
-    "updatedAt": "2026-05-26T16:02:06.895Z"
+    "updatedAt": "2026-05-27T18:04:14.645Z",
+    "lastAnsweredAt": "2026-05-27T18:04:14.645Z"
   },
   {
     "id": "375c5635-d834-49c6-955b-1980842bdb97",
@@ -123,11 +128,12 @@
     "answer": "It was an operator that basically filtered out non-alphanumeric keystrokes.\n\nFor example, when working with an input, you may only want to react to numeric values or specific valid keys.\n\nThe reason for this was a dropdown component with custom search support. \n\nWhile the user types, we only want to trigger the search for relevant keys, and avoid running the search logic for keys like Shift, Ctrl, Arrow keys, or other keydown events that are not actual input characters.",
     "category": "Angular",
     "difficulty": "hard",
-    "timesSeen": 0,
+    "timesSeen": 1,
     "correctCount": 0,
-    "wrongCount": 0,
+    "wrongCount": 1,
     "createdAt": "2026-05-26T16:11:51.660Z",
-    "updatedAt": "2026-05-26T16:11:51.660Z"
+    "updatedAt": "2026-05-27T18:03:23.243Z",
+    "lastAnsweredAt": "2026-05-27T18:03:23.243Z"
   },
   {
     "id": "018d7774-f721-4835-8b7f-e7b82fe309b5",
@@ -136,11 +142,12 @@
     "answer": "One unconventional challenge:\n\nI had at Blocworx was transforming code that was heavily written inside HTML into a proper Angular application. \n\nI had to analyze the existing structure, understand the behavior hidden in the markup, and move that logic into Angular components, services, bindings, and reusable patterns.\n\nThe challenge was not just migration, but improving the architecture so the application became easier to maintain, test, and extend.",
     "category": "Angular",
     "difficulty": "hard",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T16:16:49.443Z",
-    "updatedAt": "2026-05-26T16:16:49.443Z"
+    "updatedAt": "2026-05-27T18:02:32.247Z",
+    "lastAnsweredAt": "2026-05-27T18:02:32.247Z"
   },
   {
     "id": "51785327-a828-4079-aa75-69ef85ae8958",
@@ -149,11 +156,12 @@
     "answer": "My approach is first understanding why the component is slow by inspecting templates, bindings, subscriptions, loops, and change detection. \n\nThen I reduce complexity by splitting large components into smaller ones and optimizing rendering with techniques like OnPush, trackBy, proper observable cleanup, and moving heavy logic outside the template.\n\nFor me, optimization is also about improving maintainability and readability, not only speed.\n\nI also would check if something super big is stucking, if does I would defer and lazy load.",
     "category": "Angular",
     "difficulty": "hard",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T16:23:32.682Z",
-    "updatedAt": "2026-05-26T16:25:01.391Z"
+    "updatedAt": "2026-05-27T18:01:46.798Z",
+    "lastAnsweredAt": "2026-05-27T18:01:46.798Z"
   },
   {
     "id": "d08c22de-ddf6-4ef5-864a-08124bde0408",
@@ -162,11 +170,12 @@
     "answer": "I usually organize Angular projects by features, not only by technical folders.\n\nFor example:\n- auth\n- dashboard\n- users\n- questions\n\nEach feature contains its own:\n- components\n- services\n- routes\n- models\n\nI keep reusable things separated into a shared area:\n- shared components\n- pipes\n- directives\n- utility functions\n\nCore application logic stays in a core area:\n- authentication\n- guards\n- interceptors\n\nAPI configuration\nI also try to keep responsibilities small:\n- avoid massive components\n- avoid services doing too many things\n- split logic when needed\n\nMy main goal is:\n- easier maintenance\n- easier onboarding for developers\n- easier testing\n- clearer project structure\n- better long-term scalability",
     "category": "Angular",
     "difficulty": "hard",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-26T19:15:49.896Z",
-    "updatedAt": "2026-05-27T15:01:34.846Z"
+    "updatedAt": "2026-05-27T18:00:27.110Z",
+    "lastAnsweredAt": "2026-05-27T18:00:27.110Z"
   },
   {
     "id": "a3a03eee-56ac-4566-b50f-93df5a842747",
@@ -175,11 +184,12 @@
     "answer": "- The Angular lifecycle is the sequence of stages a component goes through from creation until destruction.\n\n- Angular provides lifecycle hooks that allow us to execute logic at specific moments of the component life.\n\n- Some common hooks are:\n  - ngOnInit\n  - ngOnChanges\n  - ngAfterViewInit\n  - ngOnDestroy\n\n- Example usages:\n\n  - ngOnInit\n    - load API data\n    - initialize variables\n\n  - ngAfterViewInit\n    - access DOM elements\n    - work with ViewChild\n\n  - ngOnDestroy\n    - unsubscribe observables\n    - clear timers\n    - prevent memory leaks\n\n- For me, lifecycle hooks are important because they help organize the component behavior correctly during rendering and updates.\n\n- They also help:\n  - improve maintainability\n  - avoid performance problems\n  - avoid memory leaks\n  - control rendering flow properly",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T10:18:17.795Z",
-    "updatedAt": "2026-05-27T15:03:50.502Z"
+    "updatedAt": "2026-05-27T17:58:44.835Z",
+    "lastAnsweredAt": "2026-05-27T17:58:44.835Z"
   },
   {
     "id": "884fcd8a-1bec-484d-85ca-d4a34005e8d1",
@@ -188,11 +198,12 @@
     "answer": "What Is The Difference Between NgOnInit And The Constructor In Angular? is important in frontend because it affects how we design, maintain, and explain software decisions.\n\nA strong answer should cover:\n1. Explain the core idea.\n2. Mention a practical use case.\n3. Call out trade-offs and mistakes to avoid.\n\nExample structure:\n- What it is: define What is the difference between ngOnInit and the constructor in Angular? in plain language.\n- Why it matters: explain the impact on the user experience, maintainability, performance, or reliability.\n- When to use it: describe a real scenario where What is the difference between ngOnInit and the constructor in Angular? is the right choice.\n- Pitfalls: mention mistakes, limitations, or trade-offs.\n- Practical example: give a concise project example that shows you have used or understood it in practice.",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T12:18:29.594Z",
-    "updatedAt": "2026-05-27T15:03:29.629Z"
+    "updatedAt": "2026-05-27T17:57:36.472Z",
+    "lastAnsweredAt": "2026-05-27T17:57:36.472Z"
   },
   {
     "id": "48848ab5-358b-4a8c-90bf-7ff5eca55148",
@@ -201,11 +212,12 @@
     "answer": "Fast Generation Timing is important in frontend because it affects how we design, maintain, and explain software decisions.\n\nA strong answer should cover:\n1. Explain the core idea.\n2. Mention a practical use case.\n3. Call out trade-offs and mistakes to avoid.\n\nExample structure:\n- What it is: define fast generation timing in plain language.\n- Why it matters: explain the impact on the user experience, maintainability, performance, or reliability.\n- When to use it: describe a real scenario where fast generation timing is the right choice.\n- Pitfalls: mention mistakes, limitations, or trade-offs.\n- Practical example: give a concise project example that shows you have used or understood it in practice.",
     "category": "Frontend",
     "difficulty": "medium",
-    "timesSeen": 0,
+    "timesSeen": 1,
     "correctCount": 0,
-    "wrongCount": 0,
+    "wrongCount": 1,
     "createdAt": "2026-05-27T12:30:44.622Z",
-    "updatedAt": "2026-05-27T12:30:44.622Z"
+    "updatedAt": "2026-05-27T17:56:05.108Z",
+    "lastAnsweredAt": "2026-05-27T17:56:05.108Z"
   },
   {
     "id": "bb11b0d2-2de9-44b9-9ea0-19bb47c4a58b",
@@ -214,11 +226,12 @@
     "answer": "Pros\n\n- fully supported \n- long term support\n- typescript by default \n\nCons\n- level of entrance it's higher, so you need to learn a lot more\n- codebase is bigger",
     "category": "Angular",
     "difficulty": "easy",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T12:58:55.215Z",
-    "updatedAt": "2026-05-27T12:58:55.215Z"
+    "updatedAt": "2026-05-27T17:55:28.020Z",
+    "lastAnsweredAt": "2026-05-27T17:55:28.020Z"
   },
   {
     "id": "31026818-3030-43df-ac3f-642c9d92df8c",
@@ -227,11 +240,12 @@
     "answer": "AOT - Ahead of Time compilation \n\nIn Angular we have AOT and JIT(Just in time compilation)\n\nJIT we use in development mode, which means we are compiling everything inside run-time. \n\nAOT compilation we use for production environments,  so we are preparing everything so we transpiling all the stuff before push it to production \n\nBenefits \n\n- faster as everything is compiled and compressed for a live environment \n- less requests as they are bundled into huge chunks application \n- is more strict (as all things should be working with current deployment)",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:20:03.230Z",
-    "updatedAt": "2026-05-27T13:20:03.230Z"
+    "updatedAt": "2026-05-27T17:55:04.181Z",
+    "lastAnsweredAt": "2026-05-27T17:55:04.181Z"
   },
   {
     "id": "7a78430a-a6e6-4b27-ba2e-6c297b9d5e8b",
@@ -240,11 +254,12 @@
     "answer": "We have angular modules working with dependency Injection, means:\n- each module has isolated scope\n- we use specific modules, and we need to configure it in case to use a new dependency into your new class contractor \n- we strictly say what is allowed from what is not",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:23:58.405Z",
-    "updatedAt": "2026-05-27T13:23:58.405Z"
+    "updatedAt": "2026-05-27T17:53:34.090Z",
+    "lastAnsweredAt": "2026-05-27T17:53:34.090Z"
   },
   {
     "id": "4ad0475a-1b55-4a50-9ad5-874e0d546993",
@@ -253,11 +268,12 @@
     "answer": "Are methods that are happening though different phrases of creating Angular Components, they are several of them that are popular:\n\n- ngOninit: this triggers when we are creating a new component, runs after the constructor is finished. \n\n- ngChange: this will trigger when we change our inputs data\n\n-ngDestroy: this will trigger when the component is destroyed, a good example is when someone click to open another URL the previous component will be destroyed to get the new one on screen, usually we unsubscribe in this action.\n\n- ngAfterViewInit: this will render when all childrens are done inside of this component, so this will trigger after that",
     "category": "Angular",
     "difficulty": "easy",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:30:02.367Z",
-    "updatedAt": "2026-05-27T13:30:02.367Z"
+    "updatedAt": "2026-05-27T17:52:52.469Z",
+    "lastAnsweredAt": "2026-05-27T17:52:52.469Z"
   },
   {
     "id": "90d49b45-5d77-47a0-8c74-d2cb324cbd4a",
@@ -266,11 +282,12 @@
     "answer": "Promises only are trigger once by default, observables can be triggering many times when the data is changed its value the observable updates the value. \n\nInside of angular you didn't need to work with promises, just with streams.",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:32:51.131Z",
-    "updatedAt": "2026-05-27T13:32:51.131Z"
+    "updatedAt": "2026-05-27T17:51:44.428Z",
+    "lastAnsweredAt": "2026-05-27T17:51:44.428Z"
   },
   {
     "id": "b732a768-9ee8-4e41-874b-8522390f555a",
@@ -279,11 +296,12 @@
     "answer": "We have 3 different ways:\n\n- inputs and outputs (we can pass data between parent and child component)\n\n- services: they are classes that exist outside of the component and all our components can be using this services \n\n- State management: this is a solution that can be subscribed and when it does the data can be passed by",
     "category": "Angular",
     "difficulty": "easy",
-    "timesSeen": 0,
-    "correctCount": 0,
-    "wrongCount": 0,
+    "timesSeen": 2,
+    "correctCount": 1,
+    "wrongCount": 1,
     "createdAt": "2026-05-27T13:38:02.221Z",
-    "updatedAt": "2026-05-27T13:38:02.221Z"
+    "updatedAt": "2026-05-27T17:50:51.299Z",
+    "lastAnsweredAt": "2026-05-27T17:50:51.299Z"
   },
   {
     "id": "f892d921-abde-442f-a7e3-553b51d03b24",
@@ -292,12 +310,12 @@
     "answer": "- A component is a directive with its own template.\n\n- Components are used to create visible UI parts of the application:\n  - pages\n  - cards\n  - modals\n  - forms\n\n- Directives are used to add behaviour or manipulate existing elements.\n\n- Angular has two common directive types:\n  - structural directives\n    - *ngIf\n    - *ngFor\n  - attribute directives\n    - ngClass\n    - ngStyle\n\n- In simple terms:\n  - components create UI\n  - directives enhance or modify behavior of existing UI elements\n\n- I usually use directives when I want reusable behavior without creating an entirely new component.",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 1,
-    "correctCount": 1,
+    "timesSeen": 2,
+    "correctCount": 2,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:44:05.736Z",
-    "updatedAt": "2026-05-27T15:14:32.892Z",
-    "lastAnsweredAt": "2026-05-27T15:13:33.829Z"
+    "updatedAt": "2026-05-27T17:49:14.977Z",
+    "lastAnsweredAt": "2026-05-27T17:49:14.977Z"
   },
   {
     "id": "8d5241cd-364e-4e33-bfec-9ef7465be719",
@@ -306,12 +324,12 @@
     "answer": "- The async pipe is an Angular pipe used to automatically subscribe to asynchronous data like:\n  - Observables\n  - Promises\n\n- It also automatically unsubscribes when the component is destroyed, helping prevent memory leaks.\n\n- Instead of manually subscribing inside the component, we can bind the observable directly in the template.\n\n- Example:\n  - users$ | async\n\n- I usually use the async pipe because it keeps templates cleaner and reduces manual subscription management inside the component.",
     "category": "Angular",
     "difficulty": "easy",
-    "timesSeen": 1,
-    "correctCount": 1,
+    "timesSeen": 2,
+    "correctCount": 2,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:46:57.194Z",
-    "updatedAt": "2026-05-27T15:11:32.737Z",
-    "lastAnsweredAt": "2026-05-27T15:11:21.617Z"
+    "updatedAt": "2026-05-27T17:48:16.636Z",
+    "lastAnsweredAt": "2026-05-27T17:48:16.636Z"
   },
   {
     "id": "8250694e-83e4-4783-8b88-4edb1857192e",
@@ -320,12 +338,12 @@
     "answer": "- Angular Ivy is the modern rendering and compilation engine introduced in Angular 9.\n\n- It improved Angular performance by making:\n  - builds faster\n  - bundles smaller\n  - debugging easier\n\n- Compared to the old View Engine, Ivy generates more optimized code and improves development experience.\n\n- In real projects, the main benefits I noticed were:\n  - faster application builds\n  - better performance\n  - improved tree-shaking\n  - easier maintenance and debugging",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 1,
-    "correctCount": 1,
+    "timesSeen": 2,
+    "correctCount": 2,
     "wrongCount": 0,
     "createdAt": "2026-05-27T13:49:16.947Z",
-    "updatedAt": "2026-05-27T15:10:15.338Z",
-    "lastAnsweredAt": "2026-05-27T15:09:48.641Z"
+    "updatedAt": "2026-05-27T17:47:04.899Z",
+    "lastAnsweredAt": "2026-05-27T17:47:04.899Z"
   },
   {
     "id": "5d6aca29-bf39-4571-b904-8b1bafeab333",
@@ -334,11 +352,12 @@
     "answer": "Yes, it can! \n\nIn modern Angular, especially with standalone components, a component can inport a directive directly\n\nExample:\n\n@Component({\n  selector: 'app-user-card',\n  standalone: true,\n  imports: [HighlightDirective],\n  templateUrl: './user-card.component.html',\n})\nexport class UserCardComponent {}\n\nThen the directive can be used inside that component’s template.",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T15:18:33.250Z",
-    "updatedAt": "2026-05-27T15:31:03.221Z"
+    "updatedAt": "2026-05-27T17:46:31.402Z",
+    "lastAnsweredAt": "2026-05-27T17:46:31.402Z"
   },
   {
     "id": "e681d35a-c5c6-4c64-a79e-eb08f319ac01",
@@ -347,11 +366,12 @@
     "answer": "- For authentication and authorization, I usually work with:\n  - JWT authentication\n  - route guards\n  - HTTP interceptors\n\n- Libraries and tools I commonly use:\n  - @auth0/angular-jwt\n    - helps manage JWT tokens\n    - automatically attaches tokens to requests\n  - Angular Router Guards\n    - protect routes based on authentication or roles\n  - HttpInterceptor\n    - centralize token handling\n    - handle 401 and 403 errors\n    - avoid duplicating security logic\n\n- For form security and validation:\n  - Angular Reactive Forms\n    - validation\n    - sanitization\n    - controlled form state\n\n- For XSS protection:\n  - I rely mostly on Angular built-in sanitization\n  - avoid dangerous things like:\n    - direct DOM manipulation\n    - unsafe innerHTML\n\n- For API security:\n  - HTTPS only\n  - secure headers from backend\n  - proper CORS configuration\n\n- For dependency security:\n  - npm audit\n  - Snyk sometimes\n  - keeping packages updated\n\n- My approach is always:\n  - frontend improves security experience\n  - backend enforces the real security rules",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
+    "timesSeen": 1,
     "correctCount": 0,
-    "wrongCount": 0,
+    "wrongCount": 1,
     "createdAt": "2026-05-27T15:34:35.378Z",
-    "updatedAt": "2026-05-27T15:34:55.780Z"
+    "updatedAt": "2026-05-27T17:46:08.791Z",
+    "lastAnsweredAt": "2026-05-27T17:46:08.791Z"
   },
   {
     "id": "620a25f7-7bc5-480d-9a0b-df2ed332bd3f",
@@ -360,11 +380,12 @@
     "answer": "- In Angular, the most common protection already comes built into the framework through:\n  - DomSanitizer\n\n- Angular automatically sanitizes many things in templates, which already helps prevent XSS attacks.\n\n- When additional sanitization is needed, the most common library I see being used is:\n  - DOMPurify\n\n- DOMPurify is widely used to sanitize:\n  - HTML content\n  - rich text editor output\n  - user-generated content\n\n- Example use cases:\n  - comments\n  - CMS content\n  - markdown rendering\n  - dynamic HTML from APIs\n\n- My approach is:\n  - trust Angular built-in sanitization first\n  - use DOMPurify when handling dynamic or external HTML content\n  - avoid bypassing Angular security unless absolutely necessary",
     "category": "",
     "difficulty": "medium",
-    "timesSeen": 0,
+    "timesSeen": 1,
     "correctCount": 0,
-    "wrongCount": 0,
+    "wrongCount": 1,
     "createdAt": "2026-05-27T15:36:50.791Z",
-    "updatedAt": "2026-05-27T15:36:50.791Z"
+    "updatedAt": "2026-05-27T17:44:44.392Z",
+    "lastAnsweredAt": "2026-05-27T17:44:44.392Z"
   },
   {
     "id": "c57df05e-6105-400f-9a7d-87b9226c2732",
@@ -373,11 +394,12 @@
     "answer": "- I use ngOnChanges when a component needs to react to changes coming from an @Input().\n\n- It is useful when the parent component passes new data and the child component needs to update something based on that change.\n\n- Example cases:\n  - reload data when an input ID changes\n  - recalculate values when input data changes\n  - update charts, filters, or forms based on new input\n  - compare previous and current input values\n\n- It solves the problem of keeping a child component synchronized with data changes from the parent.\n\n- I prefer ngOnChanges when the logic depends specifically on @Input() changes, instead of putting that logic randomly in the template or ngOnInit.\n\n\nExample\n\nexport class UserComponent implements OnChanges {\n  @Input() userId!: number;\n\n  ngOnChanges(changes: SimpleChanges): void {\n    if (changes['userId']) {\n      console.log('User ID changed:', this.userId);\n\n      // reload user data here\n      this.loadUser(this.userId);\n    }\n  }\n\n  loadUser(id: number): void {\n    // API call example\n  }\n}",
     "category": "",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T15:39:14.259Z",
-    "updatedAt": "2026-05-27T15:40:33.358Z"
+    "updatedAt": "2026-05-27T17:43:21.597Z",
+    "lastAnsweredAt": "2026-05-27T17:43:21.597Z"
   },
   {
     "id": "a9e69591-7454-43ec-bba6-e500df150ea7",
@@ -386,11 +408,12 @@
     "answer": "- ngAfterViewInit runs after Angular finishes creating the component view.\n- I use it when I need to work with something from the template after it exists.\n- Common use cases:\n  - @ViewChild\n  - focusing an input\n  - initializing charts\n  - connecting third-party UI libraries\n  - reading DOM element sizes\n\nInterview answer\n\nI use ngAfterViewInit when my logic depends on the component template being fully rendered. For example, if I need to access a ViewChild, focus an input, or initialize a third-party library that needs the DOM, this hook is the right place.",
     "category": "Angular",
     "difficulty": "medium",
-    "timesSeen": 0,
-    "correctCount": 0,
+    "timesSeen": 1,
+    "correctCount": 1,
     "wrongCount": 0,
     "createdAt": "2026-05-27T15:42:21.895Z",
-    "updatedAt": "2026-05-27T15:42:21.895Z"
+    "updatedAt": "2026-05-27T17:42:27.864Z",
+    "lastAnsweredAt": "2026-05-27T17:42:27.864Z"
   },
   {
     "id": "0c421a9f-c588-422f-abf7-be25487e59ac",
@@ -399,11 +422,11 @@
     "answer": "Lifecycle order\n\n1. constructor\n  - Component class is created\n2. ngOnChanges\n  - Runs when @Input() values change\n  - First hook called for inputs\n3. ngOnInit\n  - Component initialization logic\n4. ngDoCheck\n  - Custom change detection\n5. ngAfterContentInit\n  - Content projection initialized\n6. ngAfterContentChecked\n  - Projected content checked\n7. ngAfterViewInit\n  - Component view initialized\n8. ngAfterViewChecked\n  - Component view checked\n9. ngOnDestroy\n  - Cleanup before component removal\n\nCommonly used hooks\n\n- ngOnInit\n  - API calls\n  - initialize data\n- ngOnChanges\n  - react to input updates\n- ngAfterViewInit\n  - ViewChild\n  - DOM access\n  - charts/libs initialization\n- ngOnDestroy\n  - unsubscribe observables\n  - clear intervals/timers\n\nLess commonly used\n\n- ngDoCheck\n- ngAfterContentChecked\n- ngAfterViewChecked\n\nThese are more advanced hooks usually related to custom change detection or deep rendering control.\n\nInterview answer\n\nAngular lifecycle hooks are the stages a component goes through from creation until destruction. The sequence usually starts with constructor, then ngOnChanges, ngOnInit, rendering hooks like ngAfterViewInit, and finally ngOnDestroy for cleanup. \n\nSequence\n\nconstructor -> ngOnChanges -> ngOnInit -> ngAfterViewInit -> ngDestroy\n\nI mostly use ngOnInit, ngOnChanges, ngAfterViewInit, and ngOnDestroy in real projects.",
     "category": "",
     "difficulty": "hard",
-    "timesSeen": 1,
-    "correctCount": 1,
+    "timesSeen": 2,
+    "correctCount": 2,
     "wrongCount": 0,
     "createdAt": "2026-05-27T15:43:11.852Z",
-    "updatedAt": "2026-05-27T15:46:42.778Z",
-    "lastAnsweredAt": "2026-05-27T15:46:42.778Z"
+    "updatedAt": "2026-05-27T17:41:28.242Z",
+    "lastAnsweredAt": "2026-05-27T17:41:28.242Z"
   }
 ]
