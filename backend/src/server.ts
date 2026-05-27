@@ -9,6 +9,7 @@ import { GenerationRequestInput } from "./models/generation-request.model.js";
 
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
+const host = process.env.HOST ?? "0.0.0.0";
 
 const questionDb = new QuestionFileDbService();
 const questionGeneratorService = new LocalQuestionGeneratorService(questionDb);
@@ -151,6 +152,6 @@ app.use((error: Error, _request: Request, response: Response, _next: NextFunctio
     response.status(500).json({ message: error.message || "File/database error." });
 });
 
-app.listen(port, () => {
-    console.log(`Question Trainer backend running on http://localhost:${port}`);
+app.listen(port, host, () => {
+    console.log(`Question Trainer backend running on http://${host}:${port}`);
 });
