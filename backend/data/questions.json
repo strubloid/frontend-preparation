@@ -365,5 +365,45 @@
     "wrongCount": 0,
     "createdAt": "2026-05-27T15:36:50.791Z",
     "updatedAt": "2026-05-27T15:36:50.791Z"
+  },
+  {
+    "id": "c57df05e-6105-400f-9a7d-87b9226c2732",
+    "title": "ngOnChanges",
+    "question": "When would you use ngOnChanges, and what kind of problems does it solve?",
+    "answer": "- I use ngOnChanges when a component needs to react to changes coming from an @Input().\n\n- It is useful when the parent component passes new data and the child component needs to update something based on that change.\n\n- Example cases:\n  - reload data when an input ID changes\n  - recalculate values when input data changes\n  - update charts, filters, or forms based on new input\n  - compare previous and current input values\n\n- It solves the problem of keeping a child component synchronized with data changes from the parent.\n\n- I prefer ngOnChanges when the logic depends specifically on @Input() changes, instead of putting that logic randomly in the template or ngOnInit.\n\n\nExample\n\nexport class UserComponent implements OnChanges {\n  @Input() userId!: number;\n\n  ngOnChanges(changes: SimpleChanges): void {\n    if (changes['userId']) {\n      console.log('User ID changed:', this.userId);\n\n      // reload user data here\n      this.loadUser(this.userId);\n    }\n  }\n\n  loadUser(id: number): void {\n    // API call example\n  }\n}",
+    "category": "",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T15:39:14.259Z",
+    "updatedAt": "2026-05-27T15:40:33.358Z"
+  },
+  {
+    "id": "a9e69591-7454-43ec-bba6-e500df150ea7",
+    "title": "ngAfterViewInit",
+    "question": "What is the purpose of ngAfterViewInit, and when is it useful?",
+    "answer": "- ngAfterViewInit runs after Angular finishes creating the component view.\n- I use it when I need to work with something from the template after it exists.\n- Common use cases:\n  - @ViewChild\n  - focusing an input\n  - initializing charts\n  - connecting third-party UI libraries\n  - reading DOM element sizes\n\nInterview answer\n\nI use ngAfterViewInit when my logic depends on the component template being fully rendered. For example, if I need to access a ViewChild, focus an input, or initialize a third-party library that needs the DOM, this hook is the right place.",
+    "category": "Angular",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T15:42:21.895Z",
+    "updatedAt": "2026-05-27T15:42:21.895Z"
+  },
+  {
+    "id": "0c421a9f-c588-422f-abf7-be25487e59ac",
+    "title": "Angular Lifecycle Sequence",
+    "question": "What are the Angular lifecycle hooks and their execution sequence?",
+    "answer": "Lifecycle order\n\n1. constructor\n  - Component class is created\n2. ngOnChanges\n  - Runs when @Input() values change\n  - First hook called for inputs\n3. ngOnInit\n  - Component initialization logic\n4. ngDoCheck\n  - Custom change detection\n5. ngAfterContentInit\n  - Content projection initialized\n6. ngAfterContentChecked\n  - Projected content checked\n7. ngAfterViewInit\n  - Component view initialized\n8. ngAfterViewChecked\n  - Component view checked\n9. ngOnDestroy\n  - Cleanup before component removal\n\nCommonly used hooks\n\n- ngOnInit\n  - API calls\n  - initialize data\n- ngOnChanges\n  - react to input updates\n- ngAfterViewInit\n  - ViewChild\n  - DOM access\n  - charts/libs initialization\n- ngOnDestroy\n  - unsubscribe observables\n  - clear intervals/timers\n\nLess commonly used\n\n- ngDoCheck\n- ngAfterContentChecked\n- ngAfterViewChecked\n\nThese are more advanced hooks usually related to custom change detection or deep rendering control.\n\nInterview answer\n\nAngular lifecycle hooks are the stages a component goes through from creation until destruction. The sequence usually starts with constructor, then ngOnChanges, ngOnInit, rendering hooks like ngAfterViewInit, and finally ngOnDestroy for cleanup. \n\nSequence\n\nconstructor -> ngOnChanges -> ngOnInit -> ngAfterViewInit -> ngDestroy\n\nI mostly use ngOnInit, ngOnChanges, ngAfterViewInit, and ngOnDestroy in real projects.",
+    "category": "",
+    "difficulty": "hard",
+    "timesSeen": 1,
+    "correctCount": 1,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T15:43:11.852Z",
+    "updatedAt": "2026-05-27T15:46:42.778Z",
+    "lastAnsweredAt": "2026-05-27T15:46:42.778Z"
   }
 ]
