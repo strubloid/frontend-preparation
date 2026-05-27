@@ -2,7 +2,7 @@
   "name": "question-trainer-backend",
   "version": "1.0.0",
   "description": "Node.js and Express backend for Question Trainer.",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
