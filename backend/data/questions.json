@@ -326,5 +326,18 @@
     "createdAt": "2026-05-27T13:49:16.947Z",
     "updatedAt": "2026-05-27T15:10:15.338Z",
     "lastAnsweredAt": "2026-05-27T15:09:48.641Z"
+  },
+  {
+    "id": "5d6aca29-bf39-4571-b904-8b1bafeab333",
+    "title": "Component & Directive",
+    "question": "Can a component Import a directive?",
+    "answer": "Yes, it can! \n\nIn modern Angular, especially with standalone components, a component can inport a directive directly\n\nExample:\n\n@Component({\n  selector: 'app-user-card',\n  standalone: true,\n  imports: [HighlightDirective],\n  templateUrl: './user-card.component.html',\n})\nexport class UserCardComponent {}\n\nThen the directive can be used inside that component’s template.",
+    "category": "Angular",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T15:18:33.250Z",
+    "updatedAt": "2026-05-27T15:31:03.221Z"
   }
 ]

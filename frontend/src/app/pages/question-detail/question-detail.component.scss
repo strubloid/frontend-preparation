@@ -90,6 +90,25 @@
   white-space: pre-wrap;
 }
 
+.detail-panel__content {
+  background: rgba(5, 7, 18, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  color: rgba(232, 237, 247, 0.92);
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.72;
+  margin: 0;
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.detail-panel__content-answer {
+  min-height: 12rem;
+}
+
 .badge {
   align-items: center;
   background: rgba(255, 255, 255, 0.04);
@@ -144,6 +163,10 @@
   display: grid;
   gap: 0.9rem;
   min-height: 100%;
+}
+
+.detail-panel-question {
+  align-content: start;
 }
 
 .detail-panel-answer {

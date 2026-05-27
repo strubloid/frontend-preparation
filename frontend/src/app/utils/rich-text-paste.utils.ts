@@ -31,6 +31,22 @@ const BLOCK_TAG_NAMES = new Set([
   'UL',
 ]);
 
+export function convertClipboardContentToPlainText(html: string, plainText: string): string {
+  const richText = convertRichHtmlToPlainText(html);
+
+  if (!richText) {
+    return plainText.trim();
+  }
+
+  const normalizedPlainText = normalizeClipboardPlainText(plainText);
+
+  if (!normalizedPlainText) {
+    return richText;
+  }
+
+  return preferStructuredText(richText, normalizedPlainText);
+}
+
 export function convertRichHtmlToPlainText(html: string): string {
   if (!html.trim()) {
     return '';
@@ -39,6 +55,42 @@ export function convertRichHtmlToPlainText(html: string): string {
   const documentFragment = new DOMParser().parseFromString(html, 'text/html');
   const serializedText = serializeContainer(documentFragment.body, 0);
   return collapseExcessiveBreaks(serializedText).trim();
+}
+
+function preferStructuredText(richText: string, plainText: string): string {
+  const richScore = getStructureScore(richText);
+  const plainScore = getStructureScore(plainText);
+  return plainScore > richScore ? plainText : richText;
+}
+
+function getStructureScore(value: string): number {
+  const lines = value.split('\n');
+  let score = lines.length;
+
+  for (const line of lines) {
+    if (/^\s{2,}/.test(line)) {
+      score += 2;
+    }
+
+    if (/^\s*([-*]|\d+\.)\s+/.test(line)) {
+      score += 2;
+    }
+
+    if (/[`{}()[\];]/.test(line)) {
+      score += 1;
+    }
+  }
+
+  return score;
+}
+
+function normalizeClipboardPlainText(value: string): string {
+  return value
+    .replace(/\r\n/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\t/g, '  ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function serializeContainer(container: HTMLElement, level: number): string {

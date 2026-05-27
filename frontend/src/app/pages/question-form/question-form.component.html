@@ -36,7 +36,7 @@
     <div class="field-grid field-grid-double">
       <label>
         <span>Question</span>
-        <textarea rows="8" formControlName="question" appPreserveRichTextPaste></textarea>
+        <textarea rows="8" formControlName="question" appPreserveRichTextPaste appAutoResizeTextarea></textarea>
         <small *ngIf="form.controls.question.touched && form.controls.question.invalid"
           >Question is required.</small
         >
@@ -44,7 +44,7 @@
 
       <label>
         <span>Answer</span>
-        <textarea rows="8" formControlName="answer" appPreserveRichTextPaste></textarea>
+        <textarea rows="8" formControlName="answer" appPreserveRichTextPaste appAutoResizeTextarea></textarea>
         <small *ngIf="form.controls.answer.touched && form.controls.answer.invalid"
           >Answer is required.</small
         >

@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, inject } from '@angular/core';
-import { convertRichHtmlToPlainText } from '../utils/rich-text-paste.utils';
+import { convertClipboardContentToPlainText } from '../utils/rich-text-paste.utils';
 
 @Directive({
   selector: 'textarea[appPreserveRichTextPaste]',
@@ -11,12 +11,13 @@ export class PreserveRichTextPasteDirective {
   onPaste(event: ClipboardEvent): void {
     const clipboardData = event.clipboardData;
     const richHtml = clipboardData?.getData('text/html')?.trim();
+    const plainText = clipboardData?.getData('text/plain') ?? '';
 
     if (!clipboardData || !richHtml) {
       return;
     }
 
-    const formattedText = convertRichHtmlToPlainText(richHtml);
+    const formattedText = convertClipboardContentToPlainText(richHtml, plainText);
 
     if (!formattedText) {
       return;

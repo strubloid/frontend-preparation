@@ -63,9 +63,9 @@
       </section>
 
       <section class="detail-layout-full">
-        <article class="detail-panel">
+        <article class="detail-panel detail-panel-question">
           <span class="panel-label">Question</span>
-          <p>{{ question.question }}</p>
+          <pre class="detail-panel__content">{{ question.question }}</pre>
         </article>
       </section>
 
@@ -88,7 +88,7 @@
           </div>
 
           @if (isAnswerVisible()) {
-            <p>{{ question.answer }}</p>
+            <pre class="detail-panel__content detail-panel__content-answer">{{ question.answer }}</pre>
             <div class="detail-review-actions action-grid">
               <button
                 type="button"

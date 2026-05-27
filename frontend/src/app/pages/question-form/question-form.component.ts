@@ -3,13 +3,22 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CategoryInputComponent } from '../../components/category-input/category-input.component';
+import { AutoResizeTextareaDirective } from '../../directives/auto-resize-textarea.directive';
 import { PreserveRichTextPasteDirective } from '../../directives/preserve-rich-text-paste.directive';
 import { Question, QuestionDifficulty, QuestionInput } from '../../models/question.model';
 import { QuestionService } from '../../services/question.service';
 
 @Component({
   selector: 'app-question-form',
-  imports: [NgFor, NgIf, ReactiveFormsModule, RouterLink, CategoryInputComponent, PreserveRichTextPasteDirective],
+  imports: [
+    NgFor,
+    NgIf,
+    ReactiveFormsModule,
+    RouterLink,
+    CategoryInputComponent,
+    PreserveRichTextPasteDirective,
+    AutoResizeTextareaDirective,
+  ],
   templateUrl: './question-form.component.html',
   styleUrl: './question-form.component.scss',
 })
