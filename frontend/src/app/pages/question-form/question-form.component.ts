@@ -103,7 +103,7 @@ export class QuestionFormComponent implements OnInit {
     }
 
     this.questionService.deleteQuestion(currentQuestion.id).subscribe({
-      next: () => void this.router.navigate(['/']),
+      next: () => void this.router.navigate(['/questions']),
       error: () => {
         this.error.set('Could not delete question.');
       },
@@ -118,6 +118,6 @@ export class QuestionFormComponent implements OnInit {
       return;
     }
 
-    void this.router.navigate(['/']);
+    void this.router.navigate(['/questions']);
   }
 }

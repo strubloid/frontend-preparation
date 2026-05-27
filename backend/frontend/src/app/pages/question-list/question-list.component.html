@@ -1,0 +1,230 @@
+@if (showGenerationForm()) {
+  <app-generation-request (closeForm)="closeGenerationForm()"></app-generation-request>
+}
+
+@if (isLoading()) {
+  <p class="status-card">Loading questions...</p>
+}
+
+@if (error()) {
+  <p class="status-card error-message">{{ error() }}</p>
+}
+
+@if (viewModel$ | async; as viewModel) {
+  <section class="question-studio">
+    <header class="hero-panel">
+      <div class="hero-copy">
+        <p class="eyebrow">Frontend prep studio</p>
+        <h1>Turn your question bank into a premium one-page interview runway.</h1>
+        <p class="hero-description">
+          Browse every question in a single visual flow, jump between categories, reveal answers in place,
+          and move around the stream without leaving the page.
+        </p>
+      </div>
+
+      <div class="hero-stats">
+        <article class="metric-card accent-card">
+          <span>Total questions</span>
+          <strong>{{ viewModel.totalQuestions }}</strong>
+          <small>Always visible in one immersive page</small>
+        </article>
+        <article class="metric-card">
+          <span>Categories</span>
+          <strong>{{ viewModel.totalCategories }}</strong>
+          <small>Each category gets its own lane and color mood</small>
+        </article>
+        <article class="metric-card">
+          <span>Answered</span>
+          <strong>{{ viewModel.totalAnswered }}</strong>
+          <small>{{ viewModel.overallAccuracy }}% overall accuracy</small>
+        </article>
+      </div>
+
+      <div class="hero-actions">
+        <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">
+          Generate Question
+        </button>
+        <a class="button button-primary" routerLink="/questions/new">Create Question Manually</a>
+      </div>
+    </header>
+
+    @if (!isLoading() && viewModel.questions.length === 0) {
+      <section class="empty-state">
+        <p class="eyebrow">No questions yet</p>
+        <h2>Start your interview prep collection.</h2>
+        <p>Add a manual question or create a generation request to begin building your flow.</p>
+        <div class="empty-actions">
+          <a class="button button-primary" routerLink="/questions/new">Create Question</a>
+          <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">
+            Generate Question
+          </button>
+        </div>
+      </section>
+    }
+
+    @if (viewModel.questions.length > 0) {
+      <section class="overview-grid">
+        <aside class="category-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Category lanes</p>
+            <h2>Categories split left and right for fast scanning.</h2>
+          </div>
+
+          <div class="category-list">
+            @for (category of viewModel.categories; track category.slug) {
+              <button
+                type="button"
+                class="category-chip"
+                [class.category-chip-active]="viewModel.selectedCategory?.slug === category.slug"
+                [class.category-chip-right]="category.lane === 'right'"
+                [style.--category-hue]="category.hue"
+                (click)="openCategory(category)"
+              >
+                <span class="category-chip-head">
+                  <strong>{{ category.name }}</strong>
+                  <small>{{ category.lane === 'left' ? 'Left lane' : 'Right lane' }}</small>
+                </span>
+                <span class="category-chip-meta">
+                  <span>{{ category.count }} cards</span>
+                  <span>{{ category.averageAccuracy }}% avg.</span>
+                </span>
+              </button>
+            }
+          </div>
+        </aside>
+
+        <section class="focus-panel" [style.--category-hue]="viewModel.selectedQuestion?.categoryHue ?? 252">
+          @if (viewModel.selectedQuestion; as selectedQuestion) {
+            <div class="focus-shell">
+              <div class="focus-copy">
+                <p class="eyebrow">Current spotlight</p>
+                <h2>{{ selectedQuestion.title }}</h2>
+                <p>
+                  {{ selectedQuestion.categoryLabel }} · card {{ viewModel.selectedIndex + 1 }} of {{ viewModel.totalQuestions }}
+                </p>
+              </div>
+
+              <div class="focus-actions">
+                <button type="button" class="button button-secondary" (click)="goToPrevious(selectedQuestion, viewModel.questions)">
+                  Previous
+                </button>
+                <button type="button" class="button button-secondary" (click)="goToNext(selectedQuestion, viewModel.questions)">
+                  Next
+                </button>
+                <a class="button button-ghost" [routerLink]="['/questions', selectedQuestion.id, 'edit']">Edit</a>
+              </div>
+            </div>
+          }
+        </section>
+      </section>
+
+      <section class="stream-section">
+        <div class="section-heading">
+          <p class="eyebrow">Question stream</p>
+          <h2>One-page layout with alternating category lanes and in-place answer reveal.</h2>
+        </div>
+
+        <div class="timeline-track" aria-hidden="true"></div>
+
+        <div class="question-stream">
+          @for (question of viewModel.questions; track question.id) {
+            <article
+              class="question-card"
+              [class.question-card-right]="question.categoryLane === 'right'"
+              [class.question-card-selected]="viewModel.selectedQuestion?.id === question.id"
+              [style.--category-hue]="question.categoryHue"
+            >
+              <div class="question-card-chrome">
+                <span class="sequence-pill">{{ question.sequence }}</span>
+                <span class="lane-pill">{{ question.categoryLane === 'left' ? 'Left lane' : 'Right lane' }}</span>
+              </div>
+
+              <div class="question-card-inner">
+                <div class="question-header">
+                  <div>
+                    <p class="category-label">{{ question.categoryLabel }}</p>
+                    <h3>{{ question.title }}</h3>
+                  </div>
+
+                  <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+                </div>
+
+                <div class="question-copy-panel question-copy-panel-question">
+                  <span class="copy-label">Question</span>
+                  <p>{{ question.question }}</p>
+                </div>
+
+                @if (viewModel.selectedQuestion?.id === question.id && isAnswerVisible()) {
+                  <div class="question-copy-panel question-copy-panel-answer">
+                    <span class="copy-label">Answer</span>
+                    <p>{{ question.answer }}</p>
+                  </div>
+                }
+
+                <div class="question-stats">
+                  <span>
+                    Seen
+                    <strong>{{ question.timesSeen }}</strong>
+                  </span>
+                  <span>
+                    Right
+                    <strong>{{ question.correctCount }}</strong>
+                  </span>
+                  <span>
+                    Wrong
+                    <strong>{{ question.wrongCount }}</strong>
+                  </span>
+                  <span>
+                    Accuracy
+                    <strong>{{ question.accuracy }}%</strong>
+                  </span>
+                </div>
+
+                <div class="card-actions">
+                  @if (viewModel.selectedQuestion?.id !== question.id) {
+                    <button type="button" class="button button-primary" (click)="openQuestion(question.id)">
+                      Open in spotlight
+                    </button>
+                  } @else if (!isAnswerVisible()) {
+                    <button type="button" class="button button-primary" (click)="showAnswer()">
+                      Reveal answer
+                    </button>
+                  } @else {
+                    <button type="button" class="button button-ghost" (click)="hideAnswer()">
+                      Hide answer
+                    </button>
+                  }
+
+                  <button type="button" class="button button-secondary" (click)="goToPrevious(question, viewModel.questions)">
+                    Previous
+                  </button>
+                  <button type="button" class="button button-secondary" (click)="goToNext(question, viewModel.questions)">
+                    Next
+                  </button>
+                  <a class="button button-ghost" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
+                </div>
+
+                @if (viewModel.selectedQuestion?.id === question.id && isAnswerVisible()) {
+                  <div class="review-actions">
+                    <button type="button" class="button button-success" (click)="markResult(question, 'right')">
+                      I got it right
+                    </button>
+                    <button type="button" class="button button-danger" (click)="markResult(question, 'wrong')">
+                      I got it wrong
+                    </button>
+                    <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">
+                      Generate another question
+                    </button>
+                    <button type="button" class="button button-ghost" (click)="deleteQuestion(question, viewModel.questions)">
+                      Delete
+                    </button>
+                  </div>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
+  </section>
+}

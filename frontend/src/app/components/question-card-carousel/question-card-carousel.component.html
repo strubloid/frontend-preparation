@@ -1,0 +1,59 @@
+@if (question; as currentQuestion) {
+  <article class="carousel-card" [attr.aria-label]="'Question ' + position + ' of ' + total">
+    <div class="carousel-card__topbar">
+      <div class="carousel-card__progress-group">
+        <span class="carousel-card__progress-label">Question {{ position }} of {{ total }}</span>
+        <div class="carousel-card__progress-track" aria-hidden="true">
+          <span class="carousel-card__progress-fill" [style.width.%]="(position / total) * 100"></span>
+        </div>
+      </div>
+
+      <button type="button" class="button button-ghost carousel-card__detail-trigger" (click)="triggerOpenDetail()">
+        Open detail
+      </button>
+    </div>
+
+    <div class="carousel-card__header">
+      <div class="carousel-card__labels">
+        <span class="badge badge-category">{{ currentQuestion.categoryLabel }}</span>
+        <span class="difficulty-tag" [class]="'difficulty-tag ' + currentQuestion.difficulty">{{ currentQuestion.difficulty }}</span>
+        <span class="badge badge-muted">{{ currentQuestion.accuracy }}% accuracy</span>
+      </div>
+
+      <h2>{{ currentQuestion.title }}</h2>
+    </div>
+
+    <div class="carousel-card__body">
+      <section class="content-panel content-panel-question">
+        <span class="content-panel__label">Question</span>
+        <p>{{ currentQuestion.question }}</p>
+      </section>
+    </div>
+
+    <div class="carousel-card__stats">
+      <article>
+        <span>Seen</span>
+        <strong>{{ currentQuestion.timesSeen }}</strong>
+      </article>
+      <article>
+        <span>Right</span>
+        <strong>{{ currentQuestion.correctCount }}</strong>
+      </article>
+      <article>
+        <span>Wrong</span>
+        <strong>{{ currentQuestion.wrongCount }}</strong>
+      </article>
+      <article>
+        <span>Accuracy</span>
+        <strong>{{ currentQuestion.accuracy }}%</strong>
+      </article>
+    </div>
+
+    <div class="carousel-card__actions">
+      <button type="button" class="button button-secondary" (click)="previous.emit()">Previous</button>
+      <button type="button" class="button button-primary" (click)="triggerOpenDetail()">Practice in spotlight</button>
+      <button type="button" class="button button-secondary" (click)="next.emit()">Next</button>
+      <a class="button button-ghost" [routerLink]="['/questions', currentQuestion.id, 'edit']">Edit</a>
+    </div>
+  </article>
+}

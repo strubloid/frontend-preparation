@@ -1,59 +1,179 @@
-<section class="hero">
-  <div>
-    <p class="eyebrow">Study tool</p>
-    <h1>Question Trainer</h1>
-    <p>Store questions, reveal answers, and track your accuracy over time.</p>
-  </div>
-
-  <div class="actions">
-    <button type="button" class="button secondary" (click)="toggleGenerationForm()">
-      Generate Question
-    </button>
-    <a class="button primary" routerLink="/questions/new">Create Question Manually</a>
-  </div>
-</section>
-
 @if (showGenerationForm()) {
   <app-generation-request (closeForm)="closeGenerationForm()"></app-generation-request>
 }
 
-@if (isLoading()) {
-  <p class="status">Loading questions...</p>
-}
-
 @if (error()) {
-  <p class="error-message">{{ error() }}</p>
+  <p class="status-card error-message">{{ error() }}</p>
 }
 
-@if (questions$ | async; as questions) {
-  <section class="question-grid">
-    @if (questions.length === 0 && !isLoading()) {
-      <p class="empty-state">No questions found</p>
-    }
-
-    @for (question of questions; track question.id) {
-      <article class="question-card">
-        <div class="card-header">
-          <div>
-            <h2>{{ question.title }}</h2>
-            <p>{{ question.category || 'general' }}</p>
-          </div>
-          <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+@if (viewModel(); as viewModel) {
+  <section class="questions-page">
+    <header class="page-header">
+      <div class="page-header__copy">
+        <p class="eyebrow">Interview question bank</p>
+        <div>
+          <h1>Browse, practice, and open each interview question in a clean spotlight flow.</h1>
+          <p>
+            Compact browsing up top, focused practice in the center, and a dedicated detail route whenever you want the full spotlight.
+          </p>
         </div>
+      </div>
 
-        <div class="stats">
-          <span>Seen <strong>{{ question.timesSeen }}</strong></span>
-          <span>Right <strong>{{ question.correctCount }}</strong></span>
-          <span>Wrong <strong>{{ question.wrongCount }}</strong></span>
-          <span>Accuracy <strong>{{ accuracy(question) }}%</strong></span>
-        </div>
+      <div class="page-header__actions">
+        <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">Generate Question</button>
+        <a class="button button-primary" routerLink="/questions/new">Create Question</a>
+      </div>
+    </header>
 
-        <div class="card-actions">
-          <a class="button primary" [routerLink]="['/questions', question.id]">Open</a>
-          <a class="button secondary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
-          <button type="button" class="button danger" (click)="deleteQuestion(question)">Delete</button>
-        </div>
+    <section class="stats-row" aria-label="Question bank summary">
+      <article class="stat-pill">
+        <span>Total</span>
+        <strong>{{ viewModel.stats.totalQuestions }}</strong>
       </article>
+      <article class="stat-pill">
+        <span>Categories</span>
+        <strong>{{ viewModel.stats.totalCategories }}</strong>
+      </article>
+      <article class="stat-pill">
+        <span>Answered</span>
+        <strong>{{ viewModel.stats.totalAnswered }}</strong>
+      </article>
+      <article class="stat-pill stat-pill-accent">
+        <span>Accuracy</span>
+        <strong>{{ viewModel.stats.overallAccuracy }}%</strong>
+      </article>
+    </section>
+
+    @if (!isLoading() && viewModel.questions.length === 0) {
+      <section class="empty-state">
+        <p class="eyebrow">No questions yet</p>
+        <h2>Start your question bank.</h2>
+        <p>Create a question manually or queue a generation request to populate the browser.</p>
+        <div class="empty-state__actions">
+          <a class="button button-primary" routerLink="/questions/new">Create Question</a>
+          <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">Generate Question</button>
+        </div>
+      </section>
+    } @else {
+      <section class="category-filter-panel">
+        <div class="section-heading">
+          <p class="eyebrow">Categories</p>
+          <h2>Stable filters, no broken lanes.</h2>
+        </div>
+
+        <div class="category-filter-list">
+          <button
+            type="button"
+            class="category-chip"
+            [class.category-chip-active]="viewModel.effectiveCategorySlug === 'all'"
+            (click)="selectCategory('all')"
+          >
+            <span>All</span>
+            <strong>{{ viewModel.stats.totalQuestions }}</strong>
+          </button>
+
+          @for (category of viewModel.categories; track category.slug) {
+            <button
+              type="button"
+              class="category-chip"
+              [class.category-chip-active]="viewModel.effectiveCategorySlug === category.slug"
+              (click)="selectCategory(category.slug)"
+            >
+              <span>{{ category.label }}</span>
+              <strong>{{ category.count }}</strong>
+              <small>{{ category.averageAccuracy }}% avg.</small>
+            </button>
+          }
+        </div>
+      </section>
+
+      @if (viewModel.filteredQuestions.length === 0) {
+        <section class="empty-state empty-state-compact">
+          <p class="eyebrow">No questions in this category</p>
+          <h2>Try another filter or create one for {{ viewModel.effectiveCategorySlug }}.</h2>
+          <div class="empty-state__actions">
+            <button type="button" class="button button-secondary" (click)="selectCategory('all')">Show all</button>
+            <a class="button button-primary" routerLink="/questions/new">Create Question</a>
+          </div>
+        </section>
+      } @else {
+        <section class="browser-layout">
+          <div class="browser-stage">
+            <div class="browser-stage__header">
+              <div>
+                <p class="eyebrow">Question browser</p>
+                <h2>Flip through the bank like a focused practice deck.</h2>
+              </div>
+
+              <div class="browser-stage__meta">
+                <span>Use ← and → to move</span>
+                <button type="button" class="button button-ghost" (click)="toggleAllQuestions()">
+                  {{ showAllQuestions() ? 'Hide all questions' : 'View all questions' }}
+                </button>
+              </div>
+            </div>
+
+            <app-question-card-carousel
+              [position]="viewModel.activeIndex + 1"
+              [question]="viewModel.activeQuestion"
+              [total]="viewModel.filteredQuestions.length"
+              (next)="goToNext()"
+              (openDetail)="viewModel.activeQuestion && openQuestion(viewModel.activeQuestion.id)"
+              (previous)="goToPrevious()"
+            ></app-question-card-carousel>
+          </div>
+
+          <aside class="browser-side-panel">
+            <p class="eyebrow">Current deck</p>
+            <h3>{{ viewModel.filteredQuestions.length }} questions ready</h3>
+            <p>
+              {{ viewModel.effectiveCategorySlug === 'all' ? 'Browsing every category.' : 'Filtered to one category for focused practice.' }}
+            </p>
+
+            <div class="side-metrics">
+              <article>
+                <span>Current card</span>
+                <strong>{{ viewModel.activeIndex + 1 }}</strong>
+              </article>
+              <article>
+                <span>Remaining</span>
+                <strong>{{ viewModel.filteredQuestions.length - (viewModel.activeIndex + 1) }}</strong>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        @if (showAllQuestions()) {
+          <section class="question-grid-section">
+            <div class="section-heading">
+              <p class="eyebrow">All questions</p>
+              <h2>Compact browse mode.</h2>
+            </div>
+
+            <div class="question-grid">
+              @for (question of viewModel.filteredQuestions; track question.id; let index = $index) {
+                <button
+                  type="button"
+                  class="question-grid-card"
+                  [class.question-grid-card-active]="viewModel.activeIndex === index"
+                  (click)="selectQuestion(index)"
+                >
+                  <div class="question-grid-card__top">
+                    <span class="badge badge-category">{{ question.categoryLabel }}</span>
+                    <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+                  </div>
+                  <strong>{{ question.title }}</strong>
+                  <p>{{ question.question }}</p>
+                  <div class="question-grid-card__meta">
+                    <span>{{ question.accuracy }}% accuracy</span>
+                    <span>{{ question.timesSeen }} seen</span>
+                  </div>
+                </button>
+              }
+            </div>
+          </section>
+        }
+      }
     }
   </section>
 }

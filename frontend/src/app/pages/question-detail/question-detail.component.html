@@ -1,66 +1,92 @@
-@if (isLoading()) {
-  <p class="panel">Loading question...</p>
+@if (showGenerationForm()) {
+  <app-generation-request (closeForm)="closeGenerationForm()"></app-generation-request>
 }
 
 @if (error()) {
   <p class="panel error-message">{{ error() }}</p>
 }
 
-@if (viewModel$ | async; as viewModel) {
-  @if (!isLoading() && viewModel.question; as question) {
-    <section class="detail-card">
-      <div class="top-row">
-        <div>
-          <a routerLink="/" class="back-link">← Back</a>
-          <h1>{{ question.title }}</h1>
-          <div class="meta-row">
-            <span>{{ question.category || 'general' }}</span>
+@if (viewModel(); as viewModel) {
+  @if (!isLoading() && viewModel.currentQuestion; as question) {
+    <section class="detail-page">
+      <header class="detail-header">
+        <button type="button" class="button button-ghost" (click)="goBackToBank()">← Back to questions</button>
+        <div class="detail-header__actions">
+          <button type="button" class="button button-secondary" (click)="goToPrevious()">Previous</button>
+          <button type="button" class="button button-secondary" (click)="goToNext()">Next</button>
+          <a class="button button-primary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
+        </div>
+      </header>
+
+      <section class="detail-spotlight">
+        <div class="detail-spotlight__intro">
+          <p class="eyebrow">Question spotlight</p>
+          <div class="detail-spotlight__labels">
+            <span class="badge badge-category">{{ question.categoryLabel }}</span>
             <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+            <span class="badge badge-muted">{{ question.accuracy }}% accuracy</span>
           </div>
+          <h1>{{ question.title }}</h1>
+          <p>
+            Move through the question bank with Previous and Next without leaving the spotlight route.
+          </p>
         </div>
 
-        <a class="button secondary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
-      </div>
+        <div class="detail-spotlight__meta">
+          <article>
+            <span>Seen</span>
+            <strong>{{ question.timesSeen }}</strong>
+          </article>
+          <article>
+            <span>Right</span>
+            <strong>{{ question.correctCount }}</strong>
+          </article>
+          <article>
+            <span>Wrong</span>
+            <strong>{{ question.wrongCount }}</strong>
+          </article>
+          <article>
+            <span>Position</span>
+            <strong>{{ viewModel.questions.indexOf(question) + 1 }}/{{ viewModel.totalQuestions }}</strong>
+          </article>
+        </div>
+      </section>
 
-      <article class="question-text">
-        <h2>Question</h2>
-        <p>{{ question.question }}</p>
-      </article>
-
-      @if (isAnswerVisible()) {
-        <article class="answer-text">
-          <h2>Answer</h2>
-          <p>{{ question.answer }}</p>
+      <section class="detail-layout">
+        <article class="detail-panel">
+          <span class="panel-label">Question</span>
+          <p>{{ question.question }}</p>
         </article>
-      }
 
-      <div class="stats-row">
-        <span>Seen: <strong>{{ question.timesSeen }}</strong></span>
-        <span>Right: <strong>{{ question.correctCount }}</strong></span>
-        <span>Wrong: <strong>{{ question.wrongCount }}</strong></span>
-      </div>
+        <article class="detail-panel detail-panel-answer" [class.detail-panel-answer-visible]="isAnswerVisible()">
+          <div class="detail-panel-answer__header">
+            <span class="panel-label">Answer</span>
+            @if (!isAnswerVisible()) {
+              <button type="button" class="button button-primary" (click)="showAnswer()">Reveal answer</button>
+            } @else {
+              <button type="button" class="button button-ghost" (click)="hideAnswer()">Hide answer</button>
+            }
+          </div>
 
-      @if (!isAnswerVisible()) {
-        <div class="actions">
-          <button type="button" class="button primary" (click)="showAnswer()">Show Answer</button>
-          <a class="button secondary" [routerLink]="['/questions', question.id, 'edit']">Edit</a>
-          <a class="button ghost" routerLink="/">Back</a>
-        </div>
-      }
-
-      @if (isAnswerVisible()) {
-        <div class="actions">
-          <button type="button" class="button success" (click)="markResult(question, 'right')">I got it right</button>
-          <button type="button" class="button danger" (click)="markResult(question, 'wrong')">I got it wrong</button>
-          <button type="button" class="button secondary" (click)="goToPrevious(question, viewModel.questions)">Previous</button>
-          <button type="button" class="button secondary" (click)="goToNext(question, viewModel.questions)">Next</button>
-          <button type="button" class="button ghost" (click)="toggleGenerationForm()">Generate Question</button>
-        </div>
-      }
-
-      @if (showGenerationForm()) {
-        <app-generation-request (closeForm)="closeGenerationForm()"></app-generation-request>
-      }
+          @if (isAnswerVisible()) {
+            <p>{{ question.answer }}</p>
+            <div class="detail-review-actions">
+              <button type="button" class="button button-success" (click)="markResult(question, 'right')">I got it right</button>
+              <button type="button" class="button button-danger" (click)="markResult(question, 'wrong')">I got it wrong</button>
+              <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">Generate Question</button>
+            </div>
+          } @else {
+            <p class="detail-panel-answer__placeholder">Keep the answer hidden until you are ready to self-review.</p>
+          }
+        </article>
+      </section>
+    </section>
+  } @else if (!isLoading()) {
+    <section class="not-found-state">
+      <p class="eyebrow">Question not found</p>
+      <h1>The requested question does not exist in the bank.</h1>
+      <p>It may have been deleted or the URL is incorrect.</p>
+      <button type="button" class="button button-primary" (click)="goBackToBank()">Back to question bank</button>
     </section>
   }
 }

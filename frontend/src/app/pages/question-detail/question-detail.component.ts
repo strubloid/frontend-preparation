@@ -1,19 +1,20 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BehaviorSubject, catchError, combineLatest, distinctUntilChanged, finalize, map, of, shareReplay, switchMap, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 import { GenerationRequestComponent } from '../../components/generation-request/generation-request.component';
 import { Question } from '../../models/question.model';
 import { QuestionService } from '../../services/question.service';
-
-interface QuestionDetailViewModel {
-  question?: Question;
-  questions: Question[];
-}
+import {
+  QuestionCardViewModel,
+  buildQuestionBrowserData,
+  getQuestionByOffset,
+  isEditableTarget,
+} from '../../utils/question-browser.utils';
 
 @Component({
   selector: 'app-question-detail',
-  imports: [AsyncPipe, RouterLink, GenerationRequestComponent],
+  imports: [RouterLink, GenerationRequestComponent],
   templateUrl: './question-detail.component.html',
   styleUrl: './question-detail.component.scss',
 })
@@ -21,69 +22,94 @@ export class QuestionDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly questionService = inject(QuestionService);
-  private readonly refreshQuestionsSubject = new BehaviorSubject<void>(undefined);
 
-  readonly isAnswerVisible = signal(false);
-  readonly isLoading = signal(false);
   readonly error = signal('');
+  readonly isAnswerVisible = signal(false);
+  readonly isLoading = signal(true);
   readonly showGenerationForm = signal(false);
 
-  private readonly questionId$ = this.route.paramMap.pipe(
-    map((params) => params.get('id') ?? ''),
-    distinctUntilChanged(),
-    tap(() => {
-      this.isAnswerVisible.set(false);
-      this.error.set('');
-    }),
-  );
-
-  private readonly questions$ = this.refreshQuestionsSubject.pipe(
-    tap(() => {
-      this.isLoading.set(true);
-      this.error.set('');
-    }),
-    switchMap(() =>
-      this.questionService.getQuestions().pipe(
-        catchError(() => {
-          this.error.set('Could not load question. Make sure the backend is running.');
-          return of([] as Question[]);
-        }),
-        finalize(() => {
-          this.isLoading.set(false);
-        }),
-      ),
+  private readonly questionId = toSignal(
+    this.route.paramMap.pipe(
+      map((params) => params.get('id') ?? ''),
+      tap(() => {
+        this.error.set('');
+        this.isAnswerVisible.set(false);
+      }),
     ),
-    shareReplay({ bufferSize: 1, refCount: true }),
+    { initialValue: '' },
   );
 
-  readonly viewModel$ = combineLatest([this.questionId$, this.questions$]).pipe(
-    map(([questionId, questions]): QuestionDetailViewModel => {
-      const question = questions.find((existingQuestion) => existingQuestion.id === questionId);
-
-      if (!this.isLoading() && !question && questions.length > 0) {
-        this.error.set('Question not found.');
-      }
-
-      return { question, questions };
-    }),
+  private readonly questions = toSignal(
+    this.questionService.getQuestions().pipe(
+      tap(() => {
+        this.error.set('');
+        this.isLoading.set(false);
+      }),
+      catchError(() => {
+        this.error.set('Could not load question. Make sure the backend is running.');
+        this.isLoading.set(false);
+        return of([] as Question[]);
+      }),
+    ),
+    { initialValue: [] as Question[] },
   );
 
-  showAnswer(): void {
-    this.isAnswerVisible.set(true);
-  }
+  readonly viewModel = computed(() => {
+    const questions = this.questions() ?? [];
+    const questionBrowser = buildQuestionBrowserData(questions);
+    const currentQuestionId = this.questionId();
+    const currentQuestion = questionBrowser.questions.find((question) => question.id === currentQuestionId);
+
+    return {
+      currentQuestion,
+      hasQuestions: questionBrowser.questions.length > 0,
+      nextQuestion: currentQuestion ? getQuestionByOffset(questionBrowser.questions, currentQuestion.id, 1) : undefined,
+      previousQuestion: currentQuestion ? getQuestionByOffset(questionBrowser.questions, currentQuestion.id, -1) : undefined,
+      questions: questionBrowser.questions,
+      totalQuestions: questionBrowser.stats.totalQuestions,
+    };
+  });
 
   toggleGenerationForm(): void {
-    this.showGenerationForm.update((isVisible) => !isVisible);
+    this.showGenerationForm.update((currentValue) => !currentValue);
   }
 
   closeGenerationForm(): void {
     this.showGenerationForm.set(false);
   }
 
-  markResult(question: Question, result: 'right' | 'wrong'): void {
+  showAnswer(): void {
+    this.isAnswerVisible.set(true);
+  }
+
+  hideAnswer(): void {
+    this.isAnswerVisible.set(false);
+  }
+
+  goBackToBank(): void {
+    void this.router.navigate(['/questions']);
+  }
+
+  goToPrevious(): void {
+    const previousQuestion = this.viewModel().previousQuestion;
+
+    if (previousQuestion) {
+      void this.router.navigate(['/questions', previousQuestion.id]);
+    }
+  }
+
+  goToNext(): void {
+    const nextQuestion = this.viewModel().nextQuestion;
+
+    if (nextQuestion) {
+      void this.router.navigate(['/questions', nextQuestion.id]);
+    }
+  }
+
+  markResult(question: QuestionCardViewModel, result: 'right' | 'wrong'): void {
     this.questionService.markResult(question.id, result).subscribe({
       next: () => {
-        this.refreshQuestionsSubject.next();
+        this.isAnswerVisible.set(false);
       },
       error: () => {
         this.error.set('Could not update question stats.');
@@ -91,21 +117,20 @@ export class QuestionDetailComponent {
     });
   }
 
-  goToPrevious(question: Question, questions: Question[]): void {
-    this.navigateByOffset(question, questions, -1);
-  }
-
-  goToNext(question: Question, questions: Question[]): void {
-    this.navigateByOffset(question, questions, 1);
-  }
-
-  private navigateByOffset(question: Question, questions: Question[], offset: number): void {
-    if (questions.length === 0) {
+  @HostListener('window:keydown', ['$event'])
+  onWindowKeydown(event: KeyboardEvent): void {
+    if (isEditableTarget(event.target)) {
       return;
     }
 
-    const currentIndex = questions.findIndex((existingQuestion) => existingQuestion.id === question.id);
-    const nextIndex = (currentIndex + offset + questions.length) % questions.length;
-    void this.router.navigate(['/questions', questions[nextIndex].id]);
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.goToPrevious();
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.goToNext();
+    }
   }
 }

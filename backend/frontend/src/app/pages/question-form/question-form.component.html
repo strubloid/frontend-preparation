@@ -1,11 +1,11 @@
 <section class="form-card">
-  <a class="back-link" [routerLink]="question() ? ['/questions', question()?.id] : ['/questions']">← Back</a>
+  <a class="back-link" [routerLink]="question() ? ['/questions', question()?.id] : ['/']">← Back</a>
   <div class="form-hero">
     <div>
       <p class="eyebrow">Question editor</p>
       <h1>{{ isEditMode() ? 'Refine your question' : 'Create a new question' }}</h1>
       <p>
-        Build polished interview prompts with category, difficulty, and answer structure ready for the compact browser and spotlight detail flow.
+        Build polished interview prompts with category, difficulty, and answer structure ready for the new one-page layout.
       </p>
     </div>
   </div>
@@ -53,7 +53,7 @@
       <div class="form-note">
         <p class="eyebrow">Design note</p>
         <p>
-          Categories now stay as stable filters and badges, so the browser remains clean even as the library grows.
+          Different categories will automatically get distinct lane placement and color treatment on the main page.
         </p>
       </div>
     </div>
