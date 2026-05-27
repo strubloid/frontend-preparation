@@ -1,0 +1,30 @@
+<div class="category-input">
+  <input
+    type="text"
+    class="category-input__field"
+    [value]="currentValue()"
+    [placeholder]="placeholder()"
+    [disabled]="isDisabled()"
+    (input)="handleInput(($any($event.target).value ?? '').toString())"
+    (focus)="handleFocus()"
+    (blur)="handleBlur()"
+  />
+
+  @if (dropdownVisible()) {
+    <div class="category-input__dropdown">
+      @for (category of filteredCategories(); track category) {
+        <button type="button" class="category-input__option" (mousedown)="$event.preventDefault()" (click)="selectCategory(category)">
+          <span>{{ formatCategoryLabel(category) }}</span>
+          <small>existing</small>
+        </button>
+      }
+
+      @if (shouldShowCreateOption()) {
+        <button type="button" class="category-input__option category-input__option-create" (mousedown)="$event.preventDefault()" (click)="createCategory()">
+          <span>Create "{{ searchValue().trim() }}"</span>
+          <small>new category</small>
+        </button>
+      }
+    </div>
+  }
+</div>

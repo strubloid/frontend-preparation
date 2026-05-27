@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CategoryInputComponent } from '../category-input/category-input.component';
 import { QuestionDifficulty } from '../../models/question.model';
 import { QuestionService } from '../../services/question.service';
 
 @Component({
   selector: 'app-generation-request',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CategoryInputComponent],
   templateUrl: './generation-request.component.html',
   styleUrl: './generation-request.component.scss',
 })

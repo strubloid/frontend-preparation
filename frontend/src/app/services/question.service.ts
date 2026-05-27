@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, map, shareReplay, switchMap, tap } from 'rxjs';
 import { GenerationRequestInput, Question, QuestionInput } from '../models/question.model';
+import { normalizeCategory } from '../utils/question-browser.utils';
 
 const API_BASE_URL = '/api';
 
@@ -55,5 +56,27 @@ export class QuestionService {
 
   createGenerationRequest(input: GenerationRequestInput): Observable<Question> {
     return this.http.post<Question>(`${API_BASE_URL}/generation-requests`, input).pipe(tap(() => this.refreshQuestions()));
+  }
+
+  getAvailableCategories(): Observable<string[]> {
+    return this.getQuestions().pipe(
+      map((questions) => {
+        const categoryMap = new Map<string, string>();
+
+        for (const question of questions) {
+          const rawCategory = question.category.trim();
+          if (!rawCategory) {
+            continue;
+          }
+
+          const categoryKey = normalizeCategory(rawCategory);
+          if (!categoryMap.has(categoryKey)) {
+            categoryMap.set(categoryKey, rawCategory);
+          }
+        }
+
+        return Array.from(categoryMap.values()).sort((left, right) => left.localeCompare(right));
+      }),
+    );
   }
 }

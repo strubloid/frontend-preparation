@@ -83,6 +83,12 @@ select:focus {
   align-self: end;
 }
 
+.generation-field-hint {
+  color: rgba(212, 220, 242, 0.64);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
 .generation-panel__hint {
   color: rgba(208, 214, 224, 0.78);
   line-height: 1.6;
