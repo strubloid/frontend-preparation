@@ -170,15 +170,15 @@
   },
   {
     "id": "a3a03eee-56ac-4566-b50f-93df5a842747",
-    "title": "test",
-    "question": "test",
-    "answer": "test",
+    "title": "Angular Lifecycle",
+    "question": "What is the Angular component lifecycle, and why is it important?",
+    "answer": "- The Angular lifecycle is the sequence of stages a component goes through from creation until destruction.\n\n- Angular provides lifecycle hooks that allow us to execute logic at specific moments of the component life.\n\n- Some common hooks are:\n  - ngOnInit\n  - ngOnChanges\n  - ngAfterViewInit\n  - ngOnDestroy\n\n- Example usages:\n\n  - ngOnInit\n    - load API data\n    - initialize variables\n\n  - ngAfterViewInit\n    - access DOM elements\n    - work with ViewChild\n\n  - ngOnDestroy\n    - unsubscribe observables\n    - clear timers\n    - prevent memory leaks\n\n- For me, lifecycle hooks are important because they help organize the component behavior correctly during rendering and updates.\n\n- They also help:\n  - improve maintainability\n  - avoid performance problems\n  - avoid memory leaks\n  - control rendering flow properly",
     "category": "frontend",
     "difficulty": "hard",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-27T10:18:17.795Z",
-    "updatedAt": "2026-05-27T10:18:17.795Z"
+    "updatedAt": "2026-05-27T11:13:45.875Z"
   }
 ]
