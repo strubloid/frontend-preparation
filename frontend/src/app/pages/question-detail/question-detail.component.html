@@ -13,7 +13,7 @@
         <button type="button" class="button button-ghost" (click)="goBackToBank()">
           ← Back to questions
         </button>
-        <div class="detail-header__actions">
+        <div class="detail-header__actions action-grid">
           <button type="button" class="button button-secondary" (click)="goToPrevious()">
             Previous
           </button>
@@ -89,7 +89,7 @@
 
           @if (isAnswerVisible()) {
             <p>{{ question.answer }}</p>
-            <div class="detail-review-actions">
+            <div class="detail-review-actions action-grid">
               <button
                 type="button"
                 class="button button-success"
@@ -113,9 +113,7 @@
               </button>
             </div>
           } @else {
-            <p class="detail-panel-answer__placeholder">
-              Keep the answer hidden until you are ready to self-review.
-            </p>
+            <p class="detail-panel-answer__placeholder">When you are ready, click it to reveal!</p>
           }
         </article>
       </section>
