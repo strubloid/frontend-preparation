@@ -1,14 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import path from "path";
-import { fileURLToPath } from "url";
 import { QuestionFileDbService } from "./services/question-file-db.service.js";
 import { LocalQuestionGeneratorService } from "./services/question-generator.service.js";
 import { isValidDifficulty, validateGenerationRequestBody, validateQuestionBody } from "./validation.js";
 import { AnswerResult, QuestionInput } from "./models/question.model.js";
 import { GenerationRequestInput } from "./models/generation-request.model.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
 
