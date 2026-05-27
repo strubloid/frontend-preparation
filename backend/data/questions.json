@@ -43,13 +43,13 @@
     "title": "Code quality",
     "question": "How would you manage code quality in a large scale frontend application? \n\nWhat tools would you use?",
     "answer": "Code quality \n\nLinter\nCan catch small issues and make sure everybody writes the same code (prettier, eslint, tslint for typescript)\n- a11y : this you setup to force in your linter side to deal with accessibility \n\nUnit test \n- e2e test\n\nDependency Scan \nWe ensure that our dependencies do not have any attacks, so we scan to be sure\n\nLighthouse/ Sentry\nThey will tell you how your core web vitals change over time",
-    "category": "",
+    "category": "Angular",
     "difficulty": "medium",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:18:22.668Z",
-    "updatedAt": "2026-05-26T15:18:22.668Z"
+    "updatedAt": "2026-05-27T15:02:24.217Z"
   },
   {
     "id": "396774f5-7026-4455-8ce0-107362622daa",
@@ -95,13 +95,13 @@
     "title": "5 libraries",
     "question": "If you had to pick 5 libraries as dependencies for your Angular App which ones would you pick?",
     "answer": "Prettier (eslint or tslint)\nAllows us to format our code, so everyone in the team can have the same code format, and get some issues done by the tslint\n\nAngular material \n\nJest\n\nSanitise (DOMSanitize)\n\nRXJS (observables)\n\n@elastic/elasticsearch",
-    "category": "",
+    "category": "Angular",
     "difficulty": "medium",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-26T15:52:49.755Z",
-    "updatedAt": "2026-05-26T15:52:49.755Z"
+    "updatedAt": "2026-05-27T15:03:02.025Z"
   },
   {
     "id": "708c2673-6bd0-442e-a96a-1134d63e0e9e",
@@ -160,39 +160,39 @@
     "title": "Large Angular application",
     "question": "How do you usually structure large Angular applications to keep them scalable and maintainable over time?",
     "answer": "I usually organize Angular projects by features, not only by technical folders.\n\nFor example:\n- auth\n- dashboard\n- users\n- questions\n\nEach feature contains its own:\n- components\n- services\n- routes\n- models\n\nI keep reusable things separated into a shared area:\n- shared components\n- pipes\n- directives\n- utility functions\n\nCore application logic stays in a core area:\n- authentication\n- guards\n- interceptors\n\nAPI configuration\nI also try to keep responsibilities small:\n- avoid massive components\n- avoid services doing too many things\n- split logic when needed\n\nMy main goal is:\n- easier maintenance\n- easier onboarding for developers\n- easier testing\n- clearer project structure\n- better long-term scalability",
-    "category": "",
+    "category": "Angular",
     "difficulty": "medium",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-26T19:15:49.896Z",
-    "updatedAt": "2026-05-26T19:15:49.896Z"
+    "updatedAt": "2026-05-27T15:01:34.846Z"
   },
   {
     "id": "a3a03eee-56ac-4566-b50f-93df5a842747",
     "title": "Angular Lifecycle",
     "question": "What is the Angular component lifecycle, and why is it important?",
     "answer": "- The Angular lifecycle is the sequence of stages a component goes through from creation until destruction.\n\n- Angular provides lifecycle hooks that allow us to execute logic at specific moments of the component life.\n\n- Some common hooks are:\n  - ngOnInit\n  - ngOnChanges\n  - ngAfterViewInit\n  - ngOnDestroy\n\n- Example usages:\n\n  - ngOnInit\n    - load API data\n    - initialize variables\n\n  - ngAfterViewInit\n    - access DOM elements\n    - work with ViewChild\n\n  - ngOnDestroy\n    - unsubscribe observables\n    - clear timers\n    - prevent memory leaks\n\n- For me, lifecycle hooks are important because they help organize the component behavior correctly during rendering and updates.\n\n- They also help:\n  - improve maintainability\n  - avoid performance problems\n  - avoid memory leaks\n  - control rendering flow properly",
-    "category": "frontend",
+    "category": "Angular",
     "difficulty": "hard",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-27T10:18:17.795Z",
-    "updatedAt": "2026-05-27T11:13:45.875Z"
+    "updatedAt": "2026-05-27T15:03:50.502Z"
   },
   {
     "id": "884fcd8a-1bec-484d-85ca-d4a34005e8d1",
     "title": "What Is The Difference Between NgOnInit And The Construct...",
     "question": "How would you explain and apply: What is the difference between ngOnInit and the constructor in Angular??\n\nFocus on the frontend perspective.\nInclude when you would use it, common mistakes, and a practical example.",
     "answer": "What Is The Difference Between NgOnInit And The Constructor In Angular? is important in frontend because it affects how we design, maintain, and explain software decisions.\n\nA strong answer should cover:\n1. Explain the core idea.\n2. Mention a practical use case.\n3. Call out trade-offs and mistakes to avoid.\n\nExample structure:\n- What it is: define What is the difference between ngOnInit and the constructor in Angular? in plain language.\n- Why it matters: explain the impact on the user experience, maintainability, performance, or reliability.\n- When to use it: describe a real scenario where What is the difference between ngOnInit and the constructor in Angular? is the right choice.\n- Pitfalls: mention mistakes, limitations, or trade-offs.\n- Practical example: give a concise project example that shows you have used or understood it in practice.",
-    "category": "frontend",
+    "category": "Angular",
     "difficulty": "medium",
     "timesSeen": 0,
     "correctCount": 0,
     "wrongCount": 0,
     "createdAt": "2026-05-27T12:18:29.594Z",
-    "updatedAt": "2026-05-27T12:18:29.594Z"
+    "updatedAt": "2026-05-27T15:03:29.629Z"
   },
   {
     "id": "48848ab5-358b-4a8c-90bf-7ff5eca55148",
