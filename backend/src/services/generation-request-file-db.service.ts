@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { GenerationRequest, GenerationRequestInput } from '../models/generation-request.model.js';
+import { GenerationRequest, GenerationRequestInput, GenerationRequestStatus } from '../models/generation-request.model.js';
 
 const dataDirectory = path.resolve(process.cwd(), 'data');
 const generationRequestsFile = path.join(dataDirectory, 'generation-requests.json');
@@ -31,7 +31,7 @@ export class GenerationRequestFileDbService {
         throw new Error('generation-requests.json must contain an array.');
       }
       return parsed;
-    } catch (error) {
+    } catch {
       throw new Error(`Invalid JSON in ${generationRequestsFile}. Fix the file so it contains a valid JSON array.`);
     }
   }
@@ -41,15 +41,22 @@ export class GenerationRequestFileDbService {
     await writeFile(generationRequestsFile, `${JSON.stringify(requests, null, 2)}\n`, 'utf8');
   }
 
-  async create(input: GenerationRequestInput): Promise<GenerationRequest> {
+  async getAll(): Promise<GenerationRequest[]> {
     const requests = await this.readGenerationRequests();
+    return requests.sort((first, second) => second.createdAt.localeCompare(first.createdAt));
+  }
+
+  async create(input: GenerationRequestInput, status: GenerationRequestStatus = 'pending'): Promise<GenerationRequest> {
+    const requests = await this.readGenerationRequests();
+    const now = new Date().toISOString();
     const request: GenerationRequest = {
       id: randomUUID(),
       topic: input.topic.trim(),
       category: input.category.trim(),
       difficulty: input.difficulty,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
+      status,
+      createdAt: now,
+      startedAt: status === 'generating' ? now : undefined,
     };
 
     requests.push(request);
@@ -57,7 +64,7 @@ export class GenerationRequestFileDbService {
     return request;
   }
 
-  async updateStatus(id: string, status: GenerationRequest['status']): Promise<GenerationRequest | undefined> {
+  async update(id: string, updater: (request: GenerationRequest) => GenerationRequest): Promise<GenerationRequest | undefined> {
     const requests = await this.readGenerationRequests();
     const index = requests.findIndex((request) => request.id === id);
 
@@ -65,8 +72,36 @@ export class GenerationRequestFileDbService {
       return undefined;
     }
 
-    requests[index] = { ...requests[index], status };
+    requests[index] = updater(requests[index]);
     await this.writeGenerationRequests(requests);
     return requests[index];
+  }
+
+  async updateStatus(id: string, status: GenerationRequestStatus): Promise<GenerationRequest | undefined> {
+    return this.update(id, (request) => ({
+      ...request,
+      status,
+      startedAt: status === 'generating' ? request.startedAt ?? new Date().toISOString() : request.startedAt,
+      completedAt: status === 'completed' ? new Date().toISOString() : request.completedAt,
+    }));
+  }
+
+  async markFailed(id: string, errorMessage: string): Promise<GenerationRequest | undefined> {
+    return this.update(id, (request) => ({
+      ...request,
+      status: 'failed',
+      errorMessage,
+      completedAt: new Date().toISOString(),
+    }));
+  }
+
+  async markCompleted(id: string, generatedQuestionId: string): Promise<GenerationRequest | undefined> {
+    return this.update(id, (request) => ({
+      ...request,
+      status: 'completed',
+      generatedQuestionId,
+      completedAt: new Date().toISOString(),
+      errorMessage: undefined,
+    }));
   }
 }

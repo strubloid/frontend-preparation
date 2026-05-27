@@ -28,12 +28,3 @@ export interface GenerationRequestInput {
   category: string;
   difficulty: QuestionDifficulty;
 }
-
-export interface GenerationRequest {
-  id: string;
-  topic: string;
-  category: string;
-  difficulty: QuestionDifficulty;
-  status: 'pending' | 'completed';
-  createdAt: string;
-}

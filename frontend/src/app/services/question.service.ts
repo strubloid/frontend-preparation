@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, map, shareReplay, switchMap, tap } from 'rxjs';
-import { GenerationRequest, GenerationRequestInput, Question, QuestionInput } from '../models/question.model';
+import { GenerationRequestInput, Question, QuestionInput } from '../models/question.model';
 
 const API_BASE_URL = '/api';
 
@@ -38,30 +38,22 @@ export class QuestionService {
   }
 
   createQuestion(input: QuestionInput): Observable<Question> {
-    return this.http.post<Question>(`${API_BASE_URL}/questions`, input).pipe(
-      tap(() => this.refreshQuestions()),
-    );
+    return this.http.post<Question>(`${API_BASE_URL}/questions`, input).pipe(tap(() => this.refreshQuestions()));
   }
 
   updateQuestion(id: string, input: QuestionInput): Observable<Question> {
-    return this.http.put<Question>(`${API_BASE_URL}/questions/${id}`, input).pipe(
-      tap(() => this.refreshQuestions()),
-    );
+    return this.http.put<Question>(`${API_BASE_URL}/questions/${id}`, input).pipe(tap(() => this.refreshQuestions()));
   }
 
   deleteQuestion(id: string): Observable<void> {
-    return this.http.delete<void>(`${API_BASE_URL}/questions/${id}`).pipe(
-      tap(() => this.refreshQuestions()),
-    );
+    return this.http.delete<void>(`${API_BASE_URL}/questions/${id}`).pipe(tap(() => this.refreshQuestions()));
   }
 
   markResult(id: string, result: 'right' | 'wrong'): Observable<Question> {
-    return this.http.patch<Question>(`${API_BASE_URL}/questions/${id}/result`, { result }).pipe(
-      tap(() => this.refreshQuestions()),
-    );
+    return this.http.patch<Question>(`${API_BASE_URL}/questions/${id}/result`, { result }).pipe(tap(() => this.refreshQuestions()));
   }
 
-  createGenerationRequest(input: GenerationRequestInput): Observable<GenerationRequest> {
-    return this.http.post<GenerationRequest>(`${API_BASE_URL}/generation-requests`, input);
+  createGenerationRequest(input: GenerationRequestInput): Observable<Question> {
+    return this.http.post<Question>(`${API_BASE_URL}/generation-requests`, input).pipe(tap(() => this.refreshQuestions()));
   }
 }

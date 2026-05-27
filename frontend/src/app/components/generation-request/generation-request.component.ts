@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
-import { QuestionService } from '../../services/question.service';
 import { QuestionDifficulty } from '../../models/question.model';
+import { QuestionService } from '../../services/question.service';
 
 @Component({
   selector: 'app-generation-request',
-  imports: [ReactiveFormsModule, NgFor, NgIf],
+  imports: [ReactiveFormsModule],
   templateUrl: './generation-request.component.html',
   styleUrl: './generation-request.component.scss',
 })
@@ -17,9 +16,9 @@ export class GenerationRequestComponent {
   @Output() closeForm = new EventEmitter<void>();
 
   readonly difficulties: QuestionDifficulty[] = ['easy', 'medium', 'hard'];
-  message = '';
-  error = '';
-  isSubmitting = false;
+  readonly message = signal('');
+  readonly error = signal('');
+  readonly isSubmitting = signal(false);
 
   readonly form = this.formBuilder.nonNullable.group({
     topic: ['', Validators.required],
@@ -33,19 +32,19 @@ export class GenerationRequestComponent {
       return;
     }
 
-    this.isSubmitting = true;
-    this.error = '';
-    this.message = '';
+    this.isSubmitting.set(true);
+    this.error.set('');
+    this.message.set('');
 
     this.questionService.createGenerationRequest(this.form.getRawValue()).subscribe({
-      next: () => {
-        this.message = 'Generation request saved. Use Codex/ChatGPT with the prompt in prompts/codex-generate-question.md to generate and save the question.';
+      next: (question) => {
+        this.message.set(`Question created: ${question.title}`);
         this.form.reset({ topic: '', category: 'frontend', difficulty: 'medium' });
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
       },
       error: () => {
-        this.error = 'Could not create generation request. Make sure the backend is running.';
-        this.isSubmitting = false;
+        this.error.set('Could not generate a question. Make sure the backend is running.');
+        this.isSubmitting.set(false);
       },
     });
   }

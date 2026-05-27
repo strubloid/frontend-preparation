@@ -180,5 +180,31 @@
     "wrongCount": 0,
     "createdAt": "2026-05-27T10:18:17.795Z",
     "updatedAt": "2026-05-27T11:13:45.875Z"
+  },
+  {
+    "id": "4db1d16a-9417-4c5d-a403-019a5d4ef1b9",
+    "title": "NgInit",
+    "question": "How would you explain and apply: ngInit?\n\nFocus on the frontend perspective.\nInclude when you would use it, common mistakes, and a practical example.",
+    "answer": "NgInit is important in frontend because it affects how we design, maintain, and explain software decisions.\n\nA strong answer should cover:\n1. Explain the core idea.\n2. Mention a practical use case.\n3. Call out trade-offs and mistakes to avoid.\n\nExample structure:\n- What it is: define ngInit in plain language.\n- Why it matters: explain the impact on the user experience, maintainability, performance, or reliability.\n- When to use it: describe a real scenario where ngInit is the right choice.\n- Pitfalls: mention mistakes, limitations, or trade-offs.\n- Practical example: give a concise project example that shows you have used or understood it in practice.",
+    "category": "frontend",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T12:16:29.462Z",
+    "updatedAt": "2026-05-27T12:16:29.462Z"
+  },
+  {
+    "id": "884fcd8a-1bec-484d-85ca-d4a34005e8d1",
+    "title": "What Is The Difference Between NgOnInit And The Construct...",
+    "question": "How would you explain and apply: What is the difference between ngOnInit and the constructor in Angular??\n\nFocus on the frontend perspective.\nInclude when you would use it, common mistakes, and a practical example.",
+    "answer": "What Is The Difference Between NgOnInit And The Constructor In Angular? is important in frontend because it affects how we design, maintain, and explain software decisions.\n\nA strong answer should cover:\n1. Explain the core idea.\n2. Mention a practical use case.\n3. Call out trade-offs and mistakes to avoid.\n\nExample structure:\n- What it is: define What is the difference between ngOnInit and the constructor in Angular? in plain language.\n- Why it matters: explain the impact on the user experience, maintainability, performance, or reliability.\n- When to use it: describe a real scenario where What is the difference between ngOnInit and the constructor in Angular? is the right choice.\n- Pitfalls: mention mistakes, limitations, or trade-offs.\n- Practical example: give a concise project example that shows you have used or understood it in practice.",
+    "category": "frontend",
+    "difficulty": "medium",
+    "timesSeen": 0,
+    "correctCount": 0,
+    "wrongCount": 0,
+    "createdAt": "2026-05-27T12:18:29.594Z",
+    "updatedAt": "2026-05-27T12:18:29.594Z"
   }
 ]

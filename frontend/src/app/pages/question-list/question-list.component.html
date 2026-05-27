@@ -7,20 +7,23 @@
 }
 
 @if (viewModel(); as viewModel) {
-  <section class="questions-page">
+  <section class="questions-page" [attr.data-accent]="viewModel.categoryAccent">
     <header class="page-header">
       <div class="page-header__copy">
         <p class="eyebrow">Interview question bank</p>
         <div>
-          <h1>Browse, practice, and open each interview question in a clean spotlight flow.</h1>
+          <h1>One-page practice flow with premium card browsing and a category-aware story lane.</h1>
           <p>
-            Compact browsing up top, focused practice in the center, and a dedicated detail route whenever you want the full spotlight.
+            Inspired by crisp product UIs: strong hierarchy, focused spotlight, and a visual lane that
+            alternates left and right while categories get their own accent treatment.
           </p>
         </div>
       </div>
 
       <div class="page-header__actions">
-        <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">Generate Question</button>
+        <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">
+          Generate Question
+        </button>
         <a class="button button-primary" routerLink="/questions/new">Create Question</a>
       </div>
     </header>
@@ -48,17 +51,27 @@
       <section class="empty-state">
         <p class="eyebrow">No questions yet</p>
         <h2>Start your question bank.</h2>
-        <p>Create a question manually or queue a generation request to populate the browser.</p>
+        <p>Create a question manually or generate one directly into the bank.</p>
         <div class="empty-state__actions">
           <a class="button button-primary" routerLink="/questions/new">Create Question</a>
-          <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">Generate Question</button>
+          <button type="button" class="button button-secondary" (click)="toggleGenerationForm()">
+            Generate Question
+          </button>
         </div>
       </section>
     } @else {
       <section class="category-filter-panel">
-        <div class="section-heading">
-          <p class="eyebrow">Categories</p>
-          <h2>Stable filters, no broken lanes.</h2>
+        <div class="section-heading section-heading-split">
+          <div>
+            <p class="eyebrow">Categories</p>
+            <h2>Filter the story lane, don’t break the layout.</h2>
+            <p>Every category keeps the same structure, but gets a different accent and visual rhythm.</p>
+          </div>
+
+          <div class="section-summary-chip">
+            <span>{{ viewModel.filteredQuestions.length }}</span>
+            <small>questions in view</small>
+          </div>
         </div>
 
         <div class="category-filter-list">
@@ -92,24 +105,28 @@
           <p class="eyebrow">No questions in this category</p>
           <h2>Try another filter or create one for {{ viewModel.effectiveCategorySlug }}.</h2>
           <div class="empty-state__actions">
-            <button type="button" class="button button-secondary" (click)="selectCategory('all')">Show all</button>
+            <button type="button" class="button button-secondary" (click)="selectCategory('all')">
+              Show all
+            </button>
             <a class="button button-primary" routerLink="/questions/new">Create Question</a>
           </div>
         </section>
       } @else {
-        <section class="browser-layout">
-          <div class="browser-stage">
+        <section class="question-experience">
+          <div class="browser-stage" [attr.data-accent]="viewModel.categoryAccent">
             <div class="browser-stage__header">
               <div>
-                <p class="eyebrow">Question browser</p>
-                <h2>Flip through the bank like a focused practice deck.</h2>
+                <p class="eyebrow">Spotlight browser</p>
+                <h2>Move around the questions without leaving the flow.</h2>
               </div>
 
               <div class="browser-stage__meta">
-                <span>Use ← and → to move</span>
-                <button type="button" class="button button-ghost" (click)="toggleAllQuestions()">
-                  {{ showAllQuestions() ? 'Hide all questions' : 'View all questions' }}
-                </button>
+                <span>Use ← and → to navigate</span>
+                @if (viewModel.activeQuestion; as activeQuestion) {
+                  <button type="button" class="button button-ghost" (click)="openQuestion(activeQuestion.id)">
+                    Open full detail
+                  </button>
+                }
               </div>
             </div>
 
@@ -123,56 +140,101 @@
             ></app-question-card-carousel>
           </div>
 
-          <aside class="browser-side-panel">
-            <p class="eyebrow">Current deck</p>
-            <h3>{{ viewModel.filteredQuestions.length }} questions ready</h3>
-            <p>
-              {{ viewModel.effectiveCategorySlug === 'all' ? 'Browsing every category.' : 'Filtered to one category for focused practice.' }}
-            </p>
+          <aside class="browser-side-panel" [attr.data-accent]="viewModel.categoryAccent">
+            <p class="eyebrow">Current focus</p>
+            @if (viewModel.activeQuestion; as activeQuestion) {
+              <h3>{{ activeQuestion.title }}</h3>
+              <p>
+                {{
+                  viewModel.effectiveCategorySlug === 'all'
+                    ? 'You are browsing the whole bank in one cinematic flow.'
+                    : 'You are focused on a single category with a dedicated visual accent.'
+                }}
+              </p>
 
-            <div class="side-metrics">
-              <article>
-                <span>Current card</span>
-                <strong>{{ viewModel.activeIndex + 1 }}</strong>
-              </article>
-              <article>
-                <span>Remaining</span>
-                <strong>{{ viewModel.filteredQuestions.length - (viewModel.activeIndex + 1) }}</strong>
-              </article>
-            </div>
+              <div class="side-metrics">
+                <article>
+                  <span>Position</span>
+                  <strong>{{ viewModel.activeIndex + 1 }}</strong>
+                </article>
+                <article>
+                  <span>Remaining</span>
+                  <strong>{{ viewModel.filteredQuestions.length - (viewModel.activeIndex + 1) }}</strong>
+                </article>
+                <article>
+                  <span>Seen</span>
+                  <strong>{{ activeQuestion.timesSeen }}</strong>
+                </article>
+                <article>
+                  <span>Accuracy</span>
+                  <strong>{{ activeQuestion.accuracy }}%</strong>
+                </article>
+              </div>
+
+              <div class="browser-side-panel__tags">
+                <span class="badge badge-category">{{ activeQuestion.categoryLabel }}</span>
+                <span class="difficulty-tag" [class]="'difficulty-tag ' + activeQuestion.difficulty">
+                  {{ activeQuestion.difficulty }}
+                </span>
+              </div>
+            }
           </aside>
         </section>
 
-        @if (showAllQuestions()) {
-          <section class="question-grid-section">
-            <div class="section-heading">
-              <p class="eyebrow">All questions</p>
-              <h2>Compact browse mode.</h2>
+        <section class="lane-section">
+          <div class="section-heading section-heading-split">
+            <div>
+              <p class="eyebrow">Story lane</p>
+              <h2>Questions alternate left and right to feel alive on one page.</h2>
+              <p>Different categories keep different accents, so future categories won’t look identical.</p>
             </div>
+          </div>
 
-            <div class="question-grid">
-              @for (question of viewModel.filteredQuestions; track question.id; let index = $index) {
+          <div class="lane-list">
+            @for (question of viewModel.laneQuestions; track trackByQuestionId($index, question)) {
+              <article
+                class="lane-item"
+                [class.lane-item-right]="question.alignment === 'right'"
+                [class.lane-item-active]="viewModel.activeQuestion?.id === question.id"
+              >
+                <div class="lane-rail-marker">{{ question.sequenceLabel }}</div>
+
                 <button
                   type="button"
-                  class="question-grid-card"
-                  [class.question-grid-card-active]="viewModel.activeIndex === index"
-                  (click)="selectQuestion(index)"
+                  class="lane-card"
+                  [attr.data-accent]="question.laneStyle"
+                  [class.lane-card-active]="viewModel.activeQuestion?.id === question.id"
+                  (click)="selectQuestion($index)"
                 >
-                  <div class="question-grid-card__top">
-                    <span class="badge badge-category">{{ question.categoryLabel }}</span>
-                    <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">{{ question.difficulty }}</span>
+                  <div class="lane-card__top">
+                    <div class="lane-card__tags">
+                      <span class="badge badge-category">{{ question.categoryLabel }}</span>
+                      <span class="difficulty-tag" [class]="'difficulty-tag ' + question.difficulty">
+                        {{ question.difficulty }}
+                      </span>
+                    </div>
+                    <span class="lane-card__accuracy">{{ question.accuracy }}%</span>
                   </div>
+
                   <strong>{{ question.title }}</strong>
                   <p>{{ question.question }}</p>
-                  <div class="question-grid-card__meta">
-                    <span>{{ question.accuracy }}% accuracy</span>
+
+                  <div class="lane-card__meta">
                     <span>{{ question.timesSeen }} seen</span>
+                    <span>{{ question.correctCount }} right</span>
+                    <span>{{ question.wrongCount }} wrong</span>
                   </div>
                 </button>
-              }
-            </div>
-          </section>
-        }
+
+                <div class="lane-item__actions">
+                  <button type="button" class="button button-ghost" (click)="openQuestion(question.id)">
+                    Open
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
       }
     }
   </section>

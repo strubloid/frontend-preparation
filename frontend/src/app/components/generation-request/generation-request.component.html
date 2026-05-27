@@ -1,8 +1,8 @@
 <section class="generation-panel">
   <div class="panel-header">
     <div>
-      <p class="eyebrow">Generation request</p>
-      <h2>Queue a new study prompt</h2>
+      <p class="eyebrow">AI generation</p>
+      <h2>Generate a study question from a topic</h2>
     </div>
     <button type="button" class="button button-ghost" (click)="closeForm.emit()">Close</button>
   </div>
@@ -10,7 +10,7 @@
   <form [formGroup]="form" (ngSubmit)="submit()" class="generation-form">
     <label>
       <span>Topic</span>
-      <input type="text" formControlName="topic" placeholder="Angular components" />
+      <input type="text" formControlName="topic" placeholder="ngOnInit" />
     </label>
 
     <label>
@@ -21,15 +21,26 @@
     <label>
       <span>Difficulty</span>
       <select formControlName="difficulty">
-        <option *ngFor="let difficulty of difficulties" [value]="difficulty">{{ difficulty }}</option>
+        @for (difficulty of difficulties; track difficulty) {
+          <option [value]="difficulty">{{ difficulty }}</option>
+        }
       </select>
     </label>
 
-    <button type="submit" class="button button-primary" [disabled]="isSubmitting">
-      {{ isSubmitting ? 'Saving...' : 'Create Generation Request' }}
+    <button type="submit" class="button button-primary" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Generating question...' : 'Generate Question' }}
     </button>
   </form>
 
-  <p *ngIf="message" class="success-message">{{ message }}</p>
-  <p *ngIf="error" class="error-message">{{ error }}</p>
+  <p class="generation-panel__hint">
+    This creates a question directly in the bank. If Codex is unavailable, the backend will still create a usable study question instead of leaving the request hanging.
+  </p>
+
+  @if (message()) {
+    <p class="success-message">{{ message() }}</p>
+  }
+
+  @if (error()) {
+    <p class="error-message">{{ error() }}</p>
+  }
 </section>

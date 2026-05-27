@@ -1,8 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import { QuestionFileDbService } from './services/question-file-db.service.js';
-import { GenerationRequestFileDbService } from './services/generation-request-file-db.service.js';
-import { LocalGenerationRequestService } from './services/question-generator.service.js';
+import { LocalQuestionGeneratorService } from './services/question-generator.service.js';
 import { isValidDifficulty, validateGenerationRequestBody, validateQuestionBody } from './validation.js';
 import { AnswerResult, QuestionInput } from './models/question.model.js';
 import { GenerationRequestInput } from './models/generation-request.model.js';
@@ -11,8 +10,7 @@ const app = express();
 const port = Number(process.env.PORT ?? 3000);
 
 const questionDb = new QuestionFileDbService();
-const generationRequestDb = new GenerationRequestFileDbService();
-const questionGeneratorService = new LocalGenerationRequestService((input) => generationRequestDb.create(input));
+const questionGeneratorService = new LocalQuestionGeneratorService(questionDb);
 
 app.use(cors());
 app.use(express.json());
@@ -131,8 +129,8 @@ app.post('/api/generation-requests', async (request, response, next) => {
       return;
     }
 
-    const createdRequest = await questionGeneratorService.createGenerationRequest(body);
-    response.status(201).json(createdRequest);
+    const generatedQuestion = await questionGeneratorService.createQuestionFromTopic(body);
+    response.status(201).json(generatedQuestion);
   } catch (error) {
     next(error);
   }

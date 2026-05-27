@@ -52,10 +52,14 @@ export class QuestionFileDbService {
   }
 
   async create(input: QuestionInput): Promise<Question> {
+    return this.createWithId(input);
+  }
+
+  async createWithId(input: QuestionInput, id: string = randomUUID()): Promise<Question> {
     const questions = await this.readQuestions();
     const now = new Date().toISOString();
     const question: Question = {
-      id: randomUUID(),
+      id,
       title: input.title.trim(),
       question: input.question.trim(),
       answer: input.answer.trim(),
